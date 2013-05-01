@@ -6,7 +6,7 @@ module.exports = function (grunt) {
 
   // configurable paths
   var yeomanConfig = {
-    app: 'app',
+    lib: 'lib',
     dist: 'dist'
   };
 
@@ -23,32 +23,47 @@ module.exports = function (grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/{,*/}*.js'
+        '<%= yeoman.lib %>/{,*/}*.js'
       ]
     },
 
     watch: {
       dist: {
-        files: '<%= yeoman.app %>/{,*/}*.js',
-        tasks: ['traceur']
+        files: '<%= yeoman.lib %>/{,*/}*.js',
+        tasks: ['transpile']
       }
     },
 
-    traceur: {
-      dist: {
+    transpile: {
+      amd: {
+        type: 'amd',
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: '{,*/}*.js',
-          dest: '.tmp/'
+          cwd: '<%= yeoman.lib %>',
+          src: '{,**/}*.js',
+          dest: '<%= yeoman.dist %>',
+          ext: '.amd.js'
         }]
+      },
+      cjs: {
+        type: 'cjs',
+        files: [{
+          '<%= yeoman.dist %>/hyperagent.js': '<%= yeoman.lib %>/hyperagent.js'
+        }]
+      }
+    },
+
+    uglify: {
+      dist: {
+        files: [{'<%= yeoman.dist %>/hyperagent.min.js': '<%= yeoman.dist %>/hyperagent.js'}]
       }
     }
   });
 
   grunt.registerTask('build', [
     'clean',
-    'traceur'
+    'transpile',
+    'uglify'
   ]);
 
   // Create an alias familiar to those using webapp/angular.
