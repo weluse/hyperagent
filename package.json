@@ -9,7 +9,8 @@
     "grunt-contrib-jshint": "~0.1.1",
     "matchdep": "~0.1.1",
     "grunt-es6-module-transpiler": "~0.1.0",
-    "grunt-contrib-uglify": "~0.2.0"
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-browserify": "~0.2.3"
   },
   "engines": {
     "node": ">=0.8.0"

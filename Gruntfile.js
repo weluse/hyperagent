@@ -41,14 +41,16 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.lib %>',
           src: '{,**/}*.js',
-          dest: '<%= yeoman.dist %>',
-          ext: '.amd.js'
+          dest: '<%= yeoman.dist %>/amd/'
         }]
       },
       cjs: {
         type: 'cjs',
         files: [{
-          '<%= yeoman.dist %>/hyperagent.js': '<%= yeoman.lib %>/hyperagent.js'
+          expand: true,
+          cwd: '<%= yeoman.lib %>',
+          src: '{,**/}*.js',
+          dest: '<%= yeoman.dist %>/commonjs/'
         }]
       }
     },
@@ -57,12 +59,20 @@ module.exports = function (grunt) {
       dist: {
         files: [{'<%= yeoman.dist %>/hyperagent.min.js': '<%= yeoman.dist %>/hyperagent.js'}]
       }
+    },
+
+    browserify: {
+      dist: {
+        src: ['<%= yeoman.dist %>/commonjs/hyperagent.js'],
+        dest: '<%= yeoman.dist %>/hyperagent.js'
+      }
     }
   });
 
   grunt.registerTask('build', [
     'clean',
     'transpile',
+    'browserify',
     'uglify'
   ]);
 
