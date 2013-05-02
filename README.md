@@ -106,8 +106,8 @@ var api = new Hyperagent({
 Attributes are exposed as the `props` object on the hyperagent instance:
 
 ```javascript
-var welcome = root.props['welcome'];
-var hint1 = root.props['hint_1'];
+var welcome = root.props.welcome;
+var hint1 = root.props.hint_1;
 
 assert(welcome, 'Welcome to a haltalk server.');
 assert(hint1, 'You need an account to post stuff..');
