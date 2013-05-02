@@ -1,14 +1,12 @@
 # hyperagent
 
-A JavaScript library for NodeJS and the browser for consuming [HAL] hypermedia
-APIs.
-
-  [HAL]: http://tools.ietf.org/html/draft-kelly-json-hal-05
+A JavaScript library running both on NodeJS and in the browser for consuming
+[HAL] hypermedia APIs.
 
 ## Example
 
-Given the following example that shall represent the entrypoint and root of
-`https://api.example.com/`, hyperagent exposes the values listed below.
+The following JSON response represents the entry point of
+`https://api.example.com` and shall serve as an example for using hyperclient.
 
 ```json
 {
@@ -174,3 +172,4 @@ It is not impossible though, that hyperagent will eventually get an alternative
 callback-based API.
 
   [RFC6570]: http://tools.ietf.org/html/rfc6570
+  [HAL]: http://tools.ietf.org/html/draft-kelly-json-hal-05
