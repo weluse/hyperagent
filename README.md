@@ -86,7 +86,7 @@ var api = new Hyperagent('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
-  assert(root.url(), 'https://api.example.com/');
+  assert(root.href(), 'https://api.example.com/');
 }, function (err) {
   console.warn('Error fetching API root', err);
 });
@@ -105,12 +105,10 @@ var api = new Hyperagent({
 
 ### Attributes
 
-You can access properties on the document either with the `prop()` method or get
-an object of all properties with `props()`.
+Attributes are exposed as the `props` object on the hyperagent instance:
 
 ```javascript
-// TODO: Consider just exposing everything as one `props` object.
-var welcome = root.prop('welcome');
+var welcome = root.props('welcome');
 var hint1 = root.props()['hint_1'];
 
 assert(welcome, 'Welcome to a haltalk server.');
@@ -119,33 +117,49 @@ assert(hint1, 'You need an account to post stuff..');
 
 ### Embedded resources
 
-Embedded ressources are exposed via the `embeded` attribute of the hyperagent
+Embedded ressources are exposed via the `embedded` attribute of the hyperagent
 object and can be accessed either via the expanded URI or their currie.
+Resources are hyperagent instances of their own.
 
 ```javascript
-assert(root)
-var hint1 = root.props()['hint_1'];
+assert(root.embedded['ht:post'][0].props.content,
+       'having fun w/ the HAL Talk explorer');
 
-assert(welcome, 'Welcome to a haltalk server.');
-assert(hint1, 'You need an account to post stuff..');
+root.embedded['ht:post'][1].links['ht:in-reply-to'].fetch().then(function (post) {
+  console.log('User replying to comment #2:', post.links['ht:author'].props.title);
+})
 ```
 
 ### Links
 
-Links are exposed through the `links` attribute and either hyperagent instances
-theirselves or a list of instances.
+Links are exposed through the `links` attribute and are either hyperagent
+instances or a list of instances.
+
+Using standalone links:
 
 ```javascript
-assert(root.links.self.url(), root.url());
+assert(root.links.self.href(), root.href());
 
 // Access via currie ht:users
 root.links['ht:users'].fetch().then(function (users) {
   // Access via expanded URI
-  return users.links['http://haltalk.herokuapp.com/rels/user'].first().fetch();
+  return users.links['http://haltalk.herokuapp.com/rels/user'][0].fetch();
 }).then(function (user) {
   console.log('First user name: ', user.props.title);
 });
 ```
+
+To use [RFC6570] templated links, you can provide additional options to the `link` function:
+
+```javascript
+root.link('ht:me', {name: 'mike'}).fetch().then(function (user) {
+  assert(user.props.username, 'mike');
+});
+```
+
+## API
+
+TBD
 
 ## FAQ
 
@@ -158,3 +172,5 @@ beautifully by providing chaining mechanisms to flatten those calls.
 
 It is not impossible though, that hyperagent will eventually get an alternative
 callback-based API.
+
+  [RFC6570]: http://tools.ietf.org/html/rfc6570
