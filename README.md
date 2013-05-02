@@ -179,3 +179,7 @@ callback-based API.
 
   [RFC6570]: http://tools.ietf.org/html/rfc6570
   [HAL]: http://tools.ietf.org/html/draft-kelly-json-hal-05
+
+## License
+
+Licensed under MIT
