@@ -3,6 +3,12 @@
 A JavaScript library running both on NodeJS and in the browser for consuming
 [HAL] hypermedia APIs.
 
+## Compatibility
+
+hyperagent aims to be compatible with draft 5 of the HAL specification. As the
+spec is still being developed, hypermedia is unlikely to have a stable API until
+HAL itself stabilizes.
+
 ## Example
 
 The following JSON response represents the entry point of
