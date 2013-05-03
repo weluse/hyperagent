@@ -13,11 +13,14 @@ module.exports = function (grunt) {
   };
 
   // Name the AMD modules so we can register them in the concatenated build.
-  function processNamedAMD(src, filepath) {
+  var processNamedAMD = function (src, filepath) {
     // Use the two last components of the path, e.g. 'hyperagent/agent'
     var name = filepath.replace(/dist\/amd\//, '').replace(/\.js$/, '');
     return src.replace(/define\(/, 'define(\'' + name + '\',');
   }
+  var mountFolder = function (connect, dir) {
+      return connect.static(require('path').resolve(dir));
+  };
 
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -64,6 +67,33 @@ module.exports = function (grunt) {
       }
     },
 
+    connect: {
+      options: {
+        port: 9000,
+        // change this to '0.0.0.0' to access the server from outside
+        hostname: 'localhost'
+      },
+      test: {
+        options: {
+          middleware: function (connect) {
+            return [
+              mountFolder(connect, '<%= yeoman.dist %>'),
+              mountFolder(connect, 'test')
+            ];
+          }
+        }
+      },
+    },
+
+    mocha: {
+      all: {
+        options: {
+          run: true,
+          urls: ['http://localhost:<%= connect.options.port %>/index.html']
+        }
+      },
+    },
+
     concat: {
       dist: {
         options: {
@@ -95,6 +125,12 @@ module.exports = function (grunt) {
   // Create an alias familiar to those using webapp/angular.
   grunt.registerTask('server', [
     'watch'
+  ]);
+
+  grunt.registerTask('test', [
+    'build',
+    'connect:test',
+    'mocha'
   ]);
 
   grunt.registerTask('default', [
