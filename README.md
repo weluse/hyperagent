@@ -81,13 +81,13 @@ The following JSON response represents the entry point of
 }
 ```
 
-### Instantiating hyperagent
+### Instantiating
 
 Using defaults:
 
 ```javascript
-var Hyperagent = require('hyperagent');
-var api = new Hyperagent('https://api.example.com/');
+var Agent = require('hyperagent').Agent;
+var api = new Agent('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
@@ -100,17 +100,18 @@ api.fetch().then(function (root) {
 With custom connection parameters:
 
 ```javascript
-var Hyperagent = require('hyperagent');
-var api = new Hyperagent({
-  root: 'https://api.example.com/',
+var Agent = require('hyperagent').Agent;
+var api = new Agent({
+  url: 'https://api.example.com/',
   headers: { 'Accept': 'application/vnd.example.com.hal+json' },
-  auth: { basic: ['username', 'password'] }
+  username: 'foo',
+  password: 'bar'
 });
 ```
 
 ### Attributes
 
-Attributes are exposed as the `props` object on the hyperagent instance:
+Attributes are exposed as the `props` object on the Agent instance:
 
 ```javascript
 var welcome = root.props.welcome;
@@ -122,9 +123,9 @@ assert(hint1, 'You need an account to post stuff..');
 
 ### Embedded resources
 
-Embedded ressources are exposed via the `embedded` attribute of the hyperagent
+Embedded ressources are exposed via the `embedded` attribute of the Agent
 object and can be accessed either via the expanded URI or their currie.
-Resources are hyperagent instances of their own.
+Resources are Agent instances of their own.
 
 ```javascript
 assert(root.embedded['ht:post'][0].props.content,
@@ -137,7 +138,7 @@ root.embedded['ht:post'][1].links['ht:in-reply-to'].fetch().then(function (post)
 
 ### Links
 
-Links are exposed through the `links` attribute and are either hyperagent
+Links are exposed through the `links` attribute and are either Agent
 instances or a list of instances.
 
 Using standalone links:
@@ -164,7 +165,26 @@ root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
 
 ## API
 
-### Hyperagent#url()
+
+### configure
+
+Hyperagent depends on an underscore, an AJAX and a Promise implementation, which
+are replaceable as long as they implement the common interface. The default
+implementations are:
+
+- `_` -- `window._`
+- `ajax` -- `window.$.ajax`
+- `Promise` -- `window.RSVP.Promise`
+
+You can use the `configure` function to override those defaults:
+
+```javascript
+Hyperagent.configure('_', lodash);
+Hyperagent.configure('ajax', reqwest);
+Hyperagent.configure('Promise', Q);
+```
+
+### Agent#url()
 
 Returns the URL of where the resource was or is about to be fetched from. This
 value is always an absolute URL in contrast to the value of `links.self.href`.
