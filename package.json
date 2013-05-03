@@ -1,7 +1,6 @@
 {
   "name": "hyperagent",
   "version": "0.0.0",
-  "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-clean": "~0.4.0",
@@ -10,7 +9,8 @@
     "matchdep": "~0.1.1",
     "grunt-es6-module-transpiler": "~0.1.0",
     "grunt-contrib-uglify": "~0.2.0",
-    "grunt-browserify": "~0.2.3"
+    "grunt-contrib-concat": "~0.3.0",
+    "lodash": "~1.2.1"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -1,5 +1,7 @@
 'use strict';
 
+var path = require('path');
+
 module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -9,6 +11,13 @@ module.exports = function (grunt) {
     lib: 'lib',
     dist: 'dist'
   };
+
+  // Name the AMD modules so we can register them in the concatenated build.
+  function processNamedAMD(src, filepath) {
+    // Use the two last components of the path, e.g. 'hyperagent/agent'
+    var name = filepath.replace(/dist\/amd\//, '').replace(/\.js$/, '');
+    return src.replace(/define\(/, 'define(\'' + name + '\',');
+  }
 
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -40,7 +49,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.lib %>',
-          src: '{,**/}*.js',
+          src: ['{,**/}*.js', '!loader.js'],
           dest: '<%= yeoman.dist %>/amd/'
         }]
       },
@@ -49,8 +58,22 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.lib %>',
-          src: '{,**/}*.js',
+          src: ['{,**/}*.js', '!loader.js'],
           dest: '<%= yeoman.dist %>/commonjs/'
+        }]
+      }
+    },
+
+    concat: {
+      dist: {
+        options: {
+          banner: '(function () {\n',
+          footer: '\nwindow.Hyperagent = requireModule(\'hyperagent\');\n}());',
+          process: processNamedAMD
+        },
+        files: [{
+          src: ['<%= yeoman.lib %>/loader.js', '<%= yeoman.dist %>/amd/{,**/}*.js'],
+          dest: '<%= yeoman.dist %>/hyperagent.js'
         }]
       }
     },
@@ -59,20 +82,13 @@ module.exports = function (grunt) {
       dist: {
         files: [{'<%= yeoman.dist %>/hyperagent.min.js': '<%= yeoman.dist %>/hyperagent.js'}]
       }
-    },
-
-    browserify: {
-      dist: {
-        src: ['<%= yeoman.dist %>/commonjs/hyperagent.js'],
-        dest: '<%= yeoman.dist %>/hyperagent.js'
-      }
     }
   });
 
   grunt.registerTask('build', [
     'clean',
     'transpile',
-    'browserify',
+    'concat',
     'uglify'
   ]);
 

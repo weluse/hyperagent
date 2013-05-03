@@ -1,7 +1,8 @@
 # hyperagent
 
-A JavaScript library running both on NodeJS and in the browser for consuming
-[HAL] hypermedia APIs.
+A JavaScript library running ~~both on NodeJS and~~ in the browser for consuming
+[HAL] hypermedia APIs. NodeJS support is postponed until browser support is
+stabilized.
 
 ## Compatibility
 
@@ -90,7 +91,7 @@ var api = new Hyperagent('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
-  assert(root.href(), 'https://api.example.com/');
+  assert(root.url(), 'https://api.example.com/');
 }, function (err) {
   console.warn('Error fetching API root', err);
 });
@@ -142,7 +143,7 @@ instances or a list of instances.
 Using standalone links:
 
 ```javascript
-assert(root.links.self.href(), root.href());
+assert(root.links.self.url(), root.url());
 
 // Access via currie ht:users
 root.links['ht:users'].fetch().then(function (users) {
@@ -163,10 +164,10 @@ root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
 
 ## API
 
-### Hyperagent#href()
+### Hyperagent#url()
 
-Returns the URL of where the resource was or is about to be fetched from. This value
-is always an absolute URL in contrast to the value of `links.self.href`.
+Returns the URL of where the resource was or is about to be fetched from. This
+value is always an absolute URL in contrast to the value of `links.self.href`.
 
 ## FAQ
 
