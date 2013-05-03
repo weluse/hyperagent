@@ -163,7 +163,10 @@ root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
 
 ## API
 
-TBD
+### Hyperagent#href()
+
+Returns the URL of where the resource was or is about to be fetched from. This value
+is always an absolute URL in contrast to the value of `links.self.href`.
 
 ## FAQ
 
