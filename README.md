@@ -168,20 +168,20 @@ root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
 
 ### configure
 
-Hyperagent depends on an underscore, an AJAX and a Promise implementation, which
+Hyperagent depends on an underscore, an AJAX and a Promise/A+ implementation, which
 are replaceable as long as they implement the common interface. The default
 implementations are:
 
 - `_` -- `window._`
 - `ajax` -- `window.$.ajax`
-- `Promise` -- `window.RSVP.Promise`
+- `defer` -- `window.Q.defer`
 
 You can use the `configure` function to override those defaults:
 
 ```javascript
 Hyperagent.configure('_', lodash);
 Hyperagent.configure('ajax', reqwest);
-Hyperagent.configure('Promise', Q);
+Hyperagent.configure('defer', RSVP.Promise);
 ```
 
 ### Agent#url()
