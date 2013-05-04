@@ -126,6 +126,7 @@ module.exports = function (grunt) {
 
   // Create an alias familiar to those using webapp/angular.
   grunt.registerTask('server', [
+    'connect:test',
     'watch'
   ]);
 
