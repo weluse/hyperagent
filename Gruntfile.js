@@ -71,7 +71,8 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '.')
+              mountFolder(connect, '.'),
+              mountFolder(connect, 'dist')
             ];
           }
         }
@@ -82,7 +83,7 @@ module.exports = function (grunt) {
       all: {
         options: {
           run: true,
-          urls: ['http://localhost:<%= connect.options.port %>/test/index.html']
+          urls: ['http://localhost:<%= connect.options.port %>/test/']
         }
       },
     },
