@@ -40,13 +40,6 @@ module.exports = function (grunt) {
       ]
     },
 
-    watch: {
-      dist: {
-        files: '<%= yeoman.lib %>/{,*/}*.js',
-        tasks: ['transpile']
-      }
-    },
-
     transpile: {
       amd: {
         type: 'amd',
@@ -112,8 +105,17 @@ module.exports = function (grunt) {
       dist: {
         files: [{'<%= yeoman.dist %>/hyperagent.min.js': '<%= yeoman.dist %>/hyperagent.js'}]
       }
+    },
+
+    watch: {
+      dist: {
+        files: ['<%= yeoman.lib %>/{,**/}*.js', 'test/**/*.js'],
+        tasks: ['build']
+      }
     }
   });
+
+  grunt.renameTask('regarde', 'watch');
 
   grunt.registerTask('build', [
     'clean',
