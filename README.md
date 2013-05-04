@@ -86,8 +86,8 @@ The following JSON response represents the entry point of
 Using defaults:
 
 ```javascript
-var Agent = require('hyperagent').Agent;
-var api = new Agent('https://api.example.com/');
+var Resource = require('hyperagent').Resource;
+var api = new Resource('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
@@ -100,8 +100,8 @@ api.fetch().then(function (root) {
 With custom connection parameters:
 
 ```javascript
-var Agent = require('hyperagent').Agent;
-var api = new Agent({
+var Resource = require('hyperagent').Resource;
+var api = new Resource({
   url: 'https://api.example.com/',
   headers: { 'Accept': 'application/vnd.example.com.hal+json' },
   username: 'foo',
@@ -111,7 +111,7 @@ var api = new Agent({
 
 ### Attributes
 
-Attributes are exposed as the `props` object on the Agent instance:
+Attributes are exposed as the `props` object on the Resource instance:
 
 ```javascript
 var welcome = root.props.welcome;
@@ -123,9 +123,9 @@ assert(hint1, 'You need an account to post stuff..');
 
 ### Embedded resources
 
-Embedded ressources are exposed via the `embedded` attribute of the Agent
+Embedded ressources are exposed via the `embedded` attribute of the Resource
 object and can be accessed either via the expanded URI or their currie.
-Resources are Agent instances of their own.
+Resources are Resource instances of their own.
 
 ```javascript
 assert(root.embedded['ht:post'][0].props.content,
@@ -138,7 +138,7 @@ root.embedded['ht:post'][1].links['ht:in-reply-to'].fetch().then(function (post)
 
 ### Links
 
-Links are exposed through the `links` attribute and are either Agent
+Links are exposed through the `links` attribute and are either Resource
 instances or a list of instances.
 
 Using standalone links:
@@ -184,17 +184,17 @@ Hyperagent.configure('ajax', reqwest);
 Hyperagent.configure('defer', RSVP.Promise);
 ```
 
-### Agent#url()
+### Resource#url()
 
 Returns the URL of where the resource was or is about to be fetched from. This
 value is always an absolute URL in contrast to the value of `links.self.href`.
 
-### Agent#fetch()
+### Resource#fetch()
 
 Loads the document from the URL provided and enabled the access via `props`,
 `links`, and `embedded`.
 
-### Agent#loaded
+### Resource#loaded
 
 A boolean indicating whether the agent has been loaded via `fetch()` yet.
 

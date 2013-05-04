@@ -3,37 +3,37 @@
 (function () {
   var assert = chai.assert;
 
-  describe('Agent', function () {
+  describe('Resource', function () {
     it('should initialize', function () {
-      var agent = new Hyperagent.Agent('http://example.com/');
+      var agent = new Hyperagent.Resource('http://example.com/');
       assert(agent.fetch);
     });
 
     it('should accept options hash', function () {
-      var agent = new Hyperagent.Agent({
+      var agent = new Hyperagent.Resource({
         url: 'http://example.com/'
       });
       assert(agent.fetch);
     });
 
     it('should return its url', function () {
-      var agent = new Hyperagent.Agent('http://example.com/');
+      var agent = new Hyperagent.Resource('http://example.com/');
       assert(agent.url(), 'http://example.com/');
     });
 
     it('should return its url from an options hash', function () {
-      var agent = new Hyperagent.Agent({ url: 'http://example.com/' });
+      var agent = new Hyperagent.Resource({ url: 'http://example.com/' });
       assert(agent.url(), 'http://example.com/');
     });
 
     it('should not be loaded by default', function () {
-      var agent = new Hyperagent.Agent({ url: 'http://example.com/' });
+      var agent = new Hyperagent.Resource({ url: 'http://example.com/' });
       assert.isFalse(agent.loaded);
     });
 
-    describe('Agent.props', function () {
+    describe('Resource.props', function () {
       beforeEach(function () {
-        this.agent = new Hyperagent.Agent({ url: 'http://example.com/' });
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
       });
 
       it('should propagate properties via _parse', function () {

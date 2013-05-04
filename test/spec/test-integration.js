@@ -25,7 +25,7 @@
     it('should successfully parse a sample response', function (done) {
       this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
 
-      var agent = new Hyperagent.Agent('https://example.com');
+      var agent = new Hyperagent.Resource('https://example.com');
       assert.equal(this.ajaxCalls.length, 0);
       var promise = agent.fetch().then(function (result) {
         done();
