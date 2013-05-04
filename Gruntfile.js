@@ -17,9 +17,10 @@ module.exports = function (grunt) {
     // Use the two last components of the path, e.g. 'hyperagent/agent'
     var name = filepath.replace(/dist\/amd\//, '').replace(/\.js$/, '');
     return src.replace(/define\(/, 'define(\'' + name + '\',');
-  }
+  };
+
   var mountFolder = function (connect, dir) {
-      return connect.static(require('path').resolve(dir));
+    return connect.static(require('path').resolve(dir));
   };
 
   grunt.initConfig({
@@ -77,19 +78,18 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '<%= yeoman.dist %>'),
-              mountFolder(connect, 'test')
+              mountFolder(connect, '.')
             ];
           }
         }
-      },
+      }
     },
 
     mocha: {
       all: {
         options: {
           run: true,
-          urls: ['http://localhost:<%= connect.options.port %>/index.html']
+          urls: ['http://localhost:<%= connect.options.port %>/test/index.html']
         }
       },
     },
