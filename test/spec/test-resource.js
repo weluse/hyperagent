@@ -1,4 +1,4 @@
-/*global describe, it, chai, Hyperagent, beforeEach */
+/*global describe, it, chai, Hyperagent, beforeEach, fixtures */
 'use strict';
 (function () {
   var assert = chai.assert;
@@ -37,18 +37,36 @@
       });
 
       it('should propagate properties via _parse', function () {
-        // XXX: This is actually an invalid HAL document, so it should reaise an
-        // error.
         this.agent._parse(JSON.stringify({ title: 'Hello World' }));
         assert(this.agent.props.title, 'Hello World');
       });
+    });
 
-      it('should be loaded after parsing', function () {
-        // XXX: This is actually an invalid HAL document, so it should reaise an
-        // error.
-        this.agent._parse(JSON.stringify({ title: 'Hello World' }));
-        assert(this.agent.loaded);
+    describe('Resource.embedded', function () {
+      beforeEach(function () {
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
+      });
+
+      it('should expose embedded after parsing', function () {
+        this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
+        assert.equal(this.agent.embedded.single.props.title, 'yours truly');
+        assert.equal(this.agent.embedded.orders.length, 2);
+        assert.equal(this.agent.embedded.orders[0].props.status, 'shipped');
+      });
+
+      it('should support recursively embedded resources', function () {
+        this.agent._load(fixtures.recursiveEmbed);
+
+        assert.equal(this.agent.embedded.single.embedded.user.props.title,
+          'passy');
+      });
+
+      it('should have loaded embeds', function () {
+        this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
+
+        assert(this.agent.embedded.single.loaded);
+        assert(this.agent.embedded.orders[0].loaded);
       });
     });
   });
-})();
+}());

@@ -65,3 +65,58 @@ window.fixtures.fullDoc = {
   "hint_4": "Click the green button to follow a link with a GET request..",
   "hint_5": "Click the book icon to read docs for the link relation."
 };
+
+window.fixtures.embeddedOrders = {
+  "_links": {
+    "self": { "href": "/orders" },
+  },
+  "_embedded": {
+   "orders": [{
+       "_links": {
+         "self": { "href": "/orders/123" },
+         "basket": { "href": "/baskets/98712" },
+         "customer": { "href": "/customers/7809" }
+       },
+       "total": 30.00,
+       "currency": "USD",
+       "status": "shipped",
+     }, {
+       "_links": {
+         "self": { "href": "/orders/124" },
+         "basket": { "href": "/baskets/97213" },
+         "customer": { "href": "/customers/12369" }
+       },
+       "total": 20.00,
+       "currency": "USD",
+       "status": "processing"
+    }],
+  "single": {
+    "_links": {
+      "self": { "href": "/self/" }
+    },
+    "title": "yours truly"
+  }
+  }
+};
+
+window.fixtures.recursiveEmbed = {
+  "_links": {
+    "self": { "href": "/orders" },
+  },
+  "_embedded": {
+    "single": {
+      "_links": {
+        "self": { "href": "/self/" }
+      },
+      "_embedded": {
+        "user": {
+          "_links": {
+            "self": { "href": "/user/1" }
+          },
+          "title": "passy"
+        }
+      },
+      "title": "yours truly"
+    }
+  }
+};
