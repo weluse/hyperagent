@@ -67,6 +67,38 @@
         assert(this.agent.embedded.single.loaded);
         assert(this.agent.embedded.orders[0].loaded);
       });
+
+      it('should have the self url of the embedded resource', function () {
+        this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
+
+        assert.equal(this.agent.embedded.single.url(), '/self/');
+      });
+    });
+
+    describe('Resource.links', function () {
+      beforeEach(function () {
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
+      });
+
+      it('should expose their props', function () {
+        this.agent._load({ _links: { self: { href: 'http://example.com/self' } } });
+        assert.equal(this.agent.links.self.props.href, 'http://example.com/self');
+      });
+
+      it('should expose self link without fetching', function () {
+        this.agent._load({ _links: { self: { href: 'http://example.com/self' } } });
+        assert.equal(this.agent.links.self.url(), 'http://example.com/self');
+      });
+
+      it('should have its self href as url', function () {
+        this.agent._load(fixtures.simpleLink);
+
+        assert.equal(this.agent.links.orders.url(),
+          'https://example.com/orders/');
+
+        assert.equal(this.agent.links.orders.url(),
+          this.agent.links.orders.links.self.props.href);
+      });
     });
   });
 }());

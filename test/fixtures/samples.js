@@ -120,3 +120,14 @@ window.fixtures.recursiveEmbed = {
     }
   }
 };
+
+window.fixtures.simpleLink = {
+  "_links": {
+    "self": { "href": "/" },
+  },
+  "_links": {
+    "orders": {
+      "href": { "href": "https://example.com/orders/" }
+    }
+  }
+};
