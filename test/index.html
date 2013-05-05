@@ -30,6 +30,11 @@
     <script src="spec/test-properties.js"></script>
     <script src="spec/test-integration.js"></script>
 
-    <script>mocha.run()</script>
+    <script>
+      mocha.setup({ globals: ['LiveReload'] });
+      mocha.run();
+    </script>
+    <!-- Livereload magic -->
+    <script src="http://localhost:35729/livereload.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-clean": "~0.4.0",
-    "grunt-contrib-watch": "~0.3.1",
+    "grunt-contrib-watch": "~0.4.0",
     "grunt-contrib-jshint": "~0.1.1",
     "matchdep": "~0.1.1",
     "grunt-es6-module-transpiler": "~0.1.0",
@@ -12,8 +12,7 @@
     "grunt-contrib-concat": "~0.3.0",
     "lodash": "~1.2.1",
     "grunt-mocha": "~0.3.1",
-    "grunt-contrib-connect": "~0.3.0",
-    "grunt-regarde": "~0.1.1"
+    "grunt-contrib-connect": "~0.3.0"
   },
   "engines": {
     "node": ">=0.8.0"

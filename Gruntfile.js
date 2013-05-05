@@ -109,14 +109,15 @@ module.exports = function (grunt) {
     },
 
     watch: {
+      options: {
+        livereload: true
+      },
       dist: {
         files: ['<%= yeoman.lib %>/{,**/}*.js', 'test/**/*.js'],
         tasks: ['build']
       }
     }
   });
-
-  grunt.renameTask('regarde', 'watch');
 
   grunt.registerTask('build', [
     'clean',
