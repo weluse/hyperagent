@@ -38,6 +38,12 @@
         this.agent._parse(JSON.stringify({ title: 'Hello World' }));
         assert(this.agent.props.title, 'Hello World');
       });
+
+      it('should be iterable', function () {
+        this.agent._load({prop1: 1, prop2: 2, prop3: 3});
+        var pairs = _.pairs(this.agent.props);
+        assert.deepEqual(pairs, [['prop1', 1], ['prop2', 2], ['prop3', 3]]);
+      });
     });
 
     describe('Resource.embedded', function () {

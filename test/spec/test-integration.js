@@ -33,6 +33,7 @@
       }, function (err) {
         assert.fail(err);
       });
+
       assert.equal(this.ajaxCalls.length, 1);
       assert.equal(this.ajaxCalls[0].url, 'https://example.com');
     });
