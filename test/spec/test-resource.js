@@ -79,6 +79,13 @@
 
         assert.equal(this.agent.embedded.single.url(), '/self/');
       });
+
+      it('should be iterable', function () {
+        this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
+
+        var keys = Object.keys(this.agent.embedded);
+        assert.deepEqual(keys, ['orders', 'single']);
+      })
     });
 
     describe('Resource.links', function () {
