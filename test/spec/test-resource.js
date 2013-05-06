@@ -1,8 +1,6 @@
 /*global describe, it, chai, Hyperagent, beforeEach, fixtures */
 'use strict';
 (function () {
-  var assert = chai.assert;
-
   describe('Resource', function () {
     it('should initialize', function () {
       var agent = new Hyperagent.Resource('http://example.com/');
