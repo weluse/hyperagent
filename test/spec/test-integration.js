@@ -28,11 +28,10 @@
       var agent = new Hyperagent.Resource('https://example.com');
       assert.equal(this.ajaxCalls.length, 0);
       var promise = agent.fetch().then(function (result) {
-        done();
         assert.equal(agent.props.welcome, 'Welcome to a haltalk server.');
-      }, function (err) {
-        assert.fail(err);
-      });
+        assert.equal(agent.embedded['ht:post'].length, 2);
+        assert.equal(agent.embedded['ht:post'][0].props.content, 'having fun w/ the HAL Talk explorer');
+      }).then(done, done);
 
       assert.equal(this.ajaxCalls.length, 1);
       assert.equal(this.ajaxCalls[0].url, 'https://example.com');
