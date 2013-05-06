@@ -66,6 +66,20 @@ window.fixtures.fullDoc = {
   "hint_5": "Click the book icon to read docs for the link relation."
 };
 
+window.fixtures.subDoc = {
+  "_links": {
+    "self": {
+      "href": "/posts/4ff8b9b52e95950002000004"
+    },
+    "ht:author": {
+      "href": "/users/mamund",
+      "title": "Mike Amundsen"
+    }
+  },
+  "content": "having fun w/ the HAL Talk explorer",
+  "created_at": "2012-07-07T22:35:33+00:00"
+};
+
 window.fixtures.embeddedOrders = {
   "_links": {
     "self": { "href": "/orders" },

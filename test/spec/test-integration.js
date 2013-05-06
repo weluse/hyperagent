@@ -4,7 +4,7 @@
 
   describe('Hyperagent Integration Test', function () {
     // Configure AJAX to return what we tell it to return.
-    before(function () {
+    beforeEach(function () {
       var that = this;
 
       this.ajaxCalls = [];
@@ -28,6 +28,7 @@
       var agent = new Hyperagent.Resource('https://example.com');
       assert.equal(this.ajaxCalls.length, 0);
       var promise = agent.fetch().then(function (result) {
+        assert.equal(agent, result);
         assert.equal(agent.props.welcome, 'Welcome to a haltalk server.');
         assert.equal(agent.embedded['ht:post'].length, 2);
         assert.equal(agent.embedded['ht:post'][0].props.content, 'having fun w/ the HAL Talk explorer');
@@ -35,6 +36,22 @@
 
       assert.equal(this.ajaxCalls.length, 1);
       assert.equal(this.ajaxCalls[0].url, 'https://example.com');
+    });
+
+    it('should fetch a linked resource on demand', function (done) {
+      this.ajaxResponses.push(JSON.stringify(fixtures.subDoc));
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+      assert.equal(this.ajaxCalls.length, 0);
+      var promise = agent.fetch().then(function (result) {
+        return agent.embedded['ht:post'][0].fetch();
+      }).then(function (post) {
+        assert.equal(this.ajaxCalls.length, 2);
+        assert.equal(post.props.content, 'having fun w/ the HAL Talk explorer');
+        assert.equal(post.url(), post.links.self.props.href);
+        assert.equal(post.links['ht:author'].props.title, 'Mike Amundsen');
+      }.bind(this)).then(done, done);
     });
   });
 }());
