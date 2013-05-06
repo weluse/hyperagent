@@ -136,6 +136,17 @@ root.embedded['ht:post'][1].links['ht:in-reply-to'].fetch().then(function (post)
 })
 ```
 
+Sub-resources like `embedded` or `links` are also enumerable, so you can use
+them like this:
+
+```javascript
+var contents = root.embedded['ht:post'].map(function (post) {
+  return post.props.content;
+});
+assert(contents[0], 'having fun w/ the HAL Talk explorer');
+assert(contents[1], 'Awesome! Good too see someone figured out how to post something!! ;)');
+```
+
 ### Links
 
 Links are exposed through the `links` attribute and are either Resource
