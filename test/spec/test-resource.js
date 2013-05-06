@@ -85,7 +85,7 @@
 
         var keys = Object.keys(this.agent.embedded);
         assert.deepEqual(keys, ['orders', 'single']);
-      })
+      });
     });
 
     describe('Resource.links', function () {
@@ -109,6 +109,13 @@
         assert.equal(this.agent.links.orders.url(),
           'https://example.com/orders/');
       });
+
+      it('should be iterable', function () {
+        this.agent._load(fixtures.simpleLink);
+
+        var keys = Object.keys(this.agent.links);
+        assert.deepEqual(keys, ['self', 'orders']);
+      })
     });
   });
 }());
