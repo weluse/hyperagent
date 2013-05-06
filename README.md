@@ -17,7 +17,7 @@ During development, there are a few requirements (see [issue #4](https://github.
 - jQuery (\*)
 - Q (\*)
 - underscore (\*)
-- URI.js
+- URI.js (+ URITemplate.js)
 
 \* These are soft dependencies and can be replaced with compatible
 implementations. See `configure` below for more information.
