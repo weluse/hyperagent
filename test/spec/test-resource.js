@@ -95,9 +95,6 @@
 
         assert.equal(this.agent.links.orders.url(),
           'https://example.com/orders/');
-
-        assert.equal(this.agent.links.orders.url(),
-          this.agent.links.orders.links.self.props.href);
       });
     });
   });
