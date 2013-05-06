@@ -91,7 +91,7 @@ var api = new Resource('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
-  assert(root.url(), 'https://api.example.com/');
+  assert(root.url() === 'https://api.example.com/');
 }, function (err) {
   console.warn('Error fetching API root', err);
 });
@@ -117,8 +117,8 @@ Attributes are exposed as the `props` object on the Resource instance:
 var welcome = root.props.welcome;
 var hint1 = root.props.hint_1;
 
-assert(welcome, 'Welcome to a haltalk server.');
-assert(hint1, 'You need an account to post stuff..');
+assert(welcome === 'Welcome to a haltalk server.');
+assert(hint1 === 'You need an account to post stuff..');
 ```
 
 ### Embedded resources
@@ -128,7 +128,7 @@ object and can be accessed either via the expanded URI or their currie.
 Resources are Resource instances of their own.
 
 ```javascript
-assert(root.embedded['ht:post'][0].props.content,
+assert(root.embedded['ht:post'][0].props.content ===
        'having fun w/ the HAL Talk explorer');
 
 root.embedded['ht:post'][1].links['ht:in-reply-to'].fetch().then(function (post) {
@@ -144,7 +144,7 @@ instances or a list of instances.
 Using standalone links:
 
 ```javascript
-assert(root.links.self.url(), root.url());
+assert(root.links.self.url() === root.url());
 
 // Access via currie ht:users
 root.links['ht:users'].fetch().then(function (users) {
@@ -159,7 +159,7 @@ To use [RFC6570] templated links, you can provide additional options to the `lin
 
 ```javascript
 root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
-  assert(user.props.username, 'mike');
+  assert(user.props.username === 'mike');
 });
 ```
 
