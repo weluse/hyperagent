@@ -1,4 +1,4 @@
-/*global describe, it, chai, Hyperagent, beforeEach, fixtures */
+/*global describe, it, Hyperagent, beforeEach, fixtures, assert, _ */
 'use strict';
 (function () {
   describe('Resource', function () {
@@ -27,6 +27,22 @@
     it('should not be loaded by default', function () {
       var agent = new Hyperagent.Resource({ url: 'http://example.com/' });
       assert.isFalse(agent.loaded);
+    });
+
+    it('should normalize relative paths', function () {
+      var agent = new Hyperagent.Resource({
+        url: 'http://example.com/subresource'
+      });
+      agent._load({ _links: { order: { href: '../orders' } } });
+      assert.equal(agent.links.order.url(), 'http://example.com/orders');
+    });
+
+    it('should absolutize paths', function () {
+      var agent = new Hyperagent.Resource({
+        url: 'http://example.com/subresource/nested'
+      });
+      agent._load({ _links: { order: { href: '/orders' } } });
+      assert.equal(agent.links.order.url(), 'http://example.com/orders');
     });
 
     describe('Resource.props', function () {
@@ -115,7 +131,7 @@
 
         var keys = Object.keys(this.agent.links);
         assert.deepEqual(keys, ['self', 'orders']);
-      })
+      });
     });
   });
 }());
