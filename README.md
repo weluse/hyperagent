@@ -10,6 +10,18 @@ hyperagent aims to be compatible with draft 5 of the HAL specification. As the
 spec is still being developed, hypermedia is unlikely to have a stable API until
 HAL itself stabilizes.
 
+## Dependencies
+
+During development, there are a few requirements (see [issue #4](https://github.com/passy/hyperagent/issues/4)):
+
+- jQuery (\*)
+- Q (\*)
+- underscore (\*)
+- URI.js
+
+\* These are soft dependencies and can be replaced with compatible
+implementations. See `configure` below for more information.
+
 ## Example
 
 The following JSON response represents the entry point of
