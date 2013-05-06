@@ -62,8 +62,10 @@
       it('should have loaded embeds', function () {
         this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
 
-        assert(this.agent.embedded.single.loaded);
-        assert(this.agent.embedded.orders[0].loaded);
+        assert(this.agent.embedded.single.loaded,
+          'single should be marked as loaded');
+        assert(this.agent.embedded.orders[0].loaded,
+          'first order be marked as loaded');
       });
 
       it('should have the self url of the embedded resource', function () {
