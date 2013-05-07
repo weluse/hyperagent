@@ -178,12 +178,21 @@ root.links['ht:users'].fetch().then(function (users) {
 });
 ```
 
-To use [RFC6570] templated links, you can provide additional options to the `link` function:
+To use [RFC6570] templated links, you can provide additional options to the
+`link` function:
 
 ```javascript
 root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
   assert(user.props.username === 'mike');
 });
+```
+
+Using the `url()` accessor, you can get the absolute of the resource you are
+accessing:
+
+```javascript
+var url = root.links('ht:signup').url();
+assert(url === 'http://haltalk.herokuapp.com/signup');
 ```
 
 ## API
