@@ -5,20 +5,18 @@
   describe('Hyperagent Integration Test', function () {
     // Configure AJAX to return what we tell it to return.
     beforeEach(function () {
-      var that = this;
-
       this.ajaxCalls = [];
       this.ajaxResponses = [];
 
       var ajaxMock = function (options) {
-        that.ajaxCalls.push(options);
+        this.ajaxCalls.push(options);
 
         // Could potentially re-use RSVP's async module here to get rid of the
-        // 30ms delay.
+        // 4ms delay.
         window.setTimeout(function () {
-          options.success(that.ajaxResponses.pop());
-        }, 0);
-      };
+          options.success(this.ajaxResponses.pop());
+        }.bind(this), 0);
+      }.bind(this);
       Hyperagent.configure('ajax', ajaxMock);
     });
 
