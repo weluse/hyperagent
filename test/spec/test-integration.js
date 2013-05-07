@@ -31,7 +31,8 @@
         assert.equal(agent, result);
         assert.equal(agent.props.welcome, 'Welcome to a haltalk server.');
         assert.equal(agent.embedded['ht:post'].length, 2);
-        assert.equal(agent.embedded['ht:post'][0].props.content, 'having fun w/ the HAL Talk explorer');
+        assert.equal(agent.embedded['ht:post'][0].props.content,
+          'having fun w/ the HAL Talk explorer');
       }).then(done, done);
 
       assert.equal(this.ajaxCalls.length, 1);
