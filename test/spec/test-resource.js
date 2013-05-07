@@ -145,17 +145,17 @@
       describe('Templated Links', function () {
         it('should expand links', function () {
           this.agent._load({ _links: {
-            user: { href: 'http://example.com/users/{user}', templated: true } }
-          });
+            user: { href: 'http://example.com/users/{user}', templated: true }
+          } });
           var link = this.agent.link('user', { user: 'passy' });
           assert.equal(link.url(), 'http://example.com/users/passy');
         });
 
-        it('should be eqivalent to call link or access links', function () {
+        it('should be equivalent to call link or access links', function () {
           this.agent._load({ _links: {
             users: { href: 'http://example.com/users/' } }
           });
-          assert.equal(this.agent.link('users'), this.agent.links['users']);
+          assert.deepEqual(this.agent.link('users'), this.agent.links['users']);
         });
       });
     });

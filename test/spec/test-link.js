@@ -13,9 +13,9 @@
           href: '/users/{user}',
           templated: true
         },
-        { url: 'http://example.com/' },
-        { user: 'stephenplusplus' }
+        { url: 'http://example.com/' }
       );
+      link.expand({ user: 'stephenplusplus' });
       assert.equal(link.url(), 'http://example.com/users/stephenplusplus');
     });
   });

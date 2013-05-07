@@ -245,7 +245,7 @@ template if params are provided. For non-templated links, those too calls are
 equivalent:
 
 ```javascript
-assert(api.links.self === api.link('self'));
+assert.deepEqual(api.links.self, api.link('self'));
 ```
 
 Calling with parameters:
