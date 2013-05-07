@@ -22,5 +22,14 @@
       var value = 'wiki:autobahn';
       assert.equal(this.store.expand(value), value);
     });
+
+    it('is empty by default', function () {
+      assert.isTrue(this.store.empty());
+    });
+
+    it('is not empty if used', function () {
+      this.store.register('wiki', 'http://en.wikipedia.org/wiki/');
+      assert.isFalse(this.store.empty());
+    });
   });
 }());

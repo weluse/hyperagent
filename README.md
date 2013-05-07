@@ -191,8 +191,21 @@ Using the `url()` accessor, you can get the absolute of the resource you are
 accessing:
 
 ```javascript
-var url = root.links('ht:signup').url();
+var url = root.links['ht:signup'].url();
 assert(url === 'http://haltalk.herokuapp.com/signup');
+```
+
+### Curies
+
+Curies are supported in that you can access links, properties and embedded
+resources either with their short form or the expanded link, which means the
+following two statements are equivalent:
+
+```javascript
+var link1 = root.links['ht:signup'];
+var link2 = root.links['http://haltalk.herokuapp.com/rels/signup'];
+
+assert.deepEqual(link1, link2);
 ```
 
 ## API

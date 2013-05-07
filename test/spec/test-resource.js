@@ -171,7 +171,7 @@
           } });
 
           var link = this.agent.links['ht:users'];
-          var link2 = this.agent.links['http://example.com/rels/user'];
+          var link2 = this.agent.links['http://example.com/rels/users'];
 
           assert(link);
           assert.deepEqual(link, link2);
