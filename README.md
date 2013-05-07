@@ -197,7 +197,6 @@ assert(url === 'http://haltalk.herokuapp.com/signup');
 
 ## API
 
-
 ### configure
 
 Hyperagent depends on an underscore, an AJAX and a Promise/A+ implementation, which
@@ -225,7 +224,13 @@ value is always an absolute, normalized URL in contrast to the value of
 ### Resource#fetch()
 
 Loads the document from the URL provided and enabled the access via `props`,
-`links`, and `embedded`.
+`links`, and `embedded`. Returns a chainable promise.
+
+```javascript
+(new Resource('http://example.com/')).fetch().then(function (api) {
+  console.log('href: ', api.links.self.props.href);
+});
+```
 
 ### Resource#loaded
 
