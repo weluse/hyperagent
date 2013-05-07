@@ -53,6 +53,32 @@
       assert.equal(agent.links.order.url(), 'http://example.com/orders');
     });
 
+    it('should support expanded curies in properties', function () {
+      var agent = new Hyperagent.Resource({
+        url: 'http://example.com/'
+      });
+
+      agent._load({
+        _links: {
+          curies: [{
+            name: 'ex',
+            href: 'http://example.com/rels/{rel}',
+            templated: true
+          }]
+        },
+
+        'ex:order': {
+          bought: true
+        }
+      });
+
+      var order1 = agent.props['ex:order'];
+      var order2 = agent.props['http://example.com/rels/order'];
+
+      assert(order1);
+      assert.deepEqual(order1, order2);
+    });
+
     describe('Resource.props', function () {
       beforeEach(function () {
         this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
