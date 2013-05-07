@@ -45,6 +45,14 @@
       assert.equal(agent.links.order.url(), 'http://example.com/orders');
     });
 
+    it('should absolutize full urls', function () {
+      var agent = new Hyperagent.Resource({
+        url: 'http://example.com/subresource/nested'
+      });
+      agent._load({ _links: { order: { href: 'http://example.com/orders' } } });
+      assert.equal(agent.links.order.url(), 'http://example.com/orders');
+    });
+
     describe('Resource.props', function () {
       beforeEach(function () {
         this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });

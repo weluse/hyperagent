@@ -141,4 +141,6 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-devtools');
 };
