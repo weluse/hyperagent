@@ -251,7 +251,7 @@ assert(api.links.self === api.link('self'));
 Calling with parameters:
 
 ```javascript
-// Given a `me` URI template of http://example.com/users/{username}
+// Given a `me` URI template of `http://example.com/users/{username}`
 var link = api.link('me', { username: 'sindresorhus' });
 assert(link.url() === 'http://example.com/users/sindresorhus');
 ```
