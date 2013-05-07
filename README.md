@@ -238,6 +238,24 @@ A boolean indicating whether the resource has been completely loaded or is
 potentially incomplete. Resources retrieved via `fetched()` and embedded
 resources are considered as fully loaded.
 
+### Resource#link(rel[, params])
+
+Creates a new link resource identified by the given `rel` and expands the link
+template if params are provided. For non-templated links, those too calls are
+equivalent:
+
+```javascript
+assert(api.links.self === api.link('self'));
+```
+
+Calling with parameters:
+
+```javascript
+// Given a `me` URI template of http://example.com/users/{username}
+var link = api.link('me', { username: 'sindresorhus' });
+assert(link.url() === 'http://example.com/users/sindresorhus');
+```
+
 ## FAQ
 
 ### Promises?
