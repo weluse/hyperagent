@@ -220,7 +220,9 @@ Loads the document from the URL provided and enabled the access via `props`,
 
 ### Resource#loaded
 
-A boolean indicating whether the agent has been loaded via `fetch()` yet.
+A boolean indicating whether the resource has been completely loaded or is
+potentially incomplete. Resources retrieved via `fetched()` and embedded
+resources are considered as fully loaded.
 
 ## FAQ
 
