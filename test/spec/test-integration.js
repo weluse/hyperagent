@@ -49,7 +49,7 @@
       }).then(function (post) {
         assert.equal(this.ajaxCalls.length, 2);
         assert.equal(post.props.content, 'having fun w/ the HAL Talk explorer');
-        assert.equal(post.url(), post.links.self.props.href);
+        assert.equal(post.url(), 'http://haltalk.herokuapp.com' + post.links.self.props.href);
         assert.equal(post.links['ht:author'].props.title, 'Mike Amundsen');
       }.bind(this)).then(done, done);
     });

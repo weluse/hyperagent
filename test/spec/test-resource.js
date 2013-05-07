@@ -101,7 +101,8 @@
       it('should have the self url of the embedded resource', function () {
         this.agent._parse(JSON.stringify(fixtures.embeddedOrders));
 
-        assert.equal(this.agent.embedded.single.url(), '/self/');
+        assert.equal(this.agent.embedded.single.url(),
+          'http://example.com/self/');
       });
 
       it('should be iterable', function () {
