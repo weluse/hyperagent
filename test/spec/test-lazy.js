@@ -17,9 +17,11 @@
         foo: {
         }
       }, {
-        transform: function (val) {
-          val.omfg = true;
-          return val;
+        factory: function (object, options) {
+          var resource = new Hyperagent.Resource(options);
+          resource._load(object);
+          resource.omfg = true;
+          return resource;
         }
       });
 
