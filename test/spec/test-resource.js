@@ -158,6 +158,39 @@
           assert.deepEqual(this.agent.link('users'), this.agent.links['users']);
         });
       });
+
+      describe('CURIE Links', function () {
+        it('should treat CURIE links like normal links', function () {
+          this.agent._load({ _links: {
+            'ht:users': { href: '/users/' },
+            curies: [{
+              name: 'ht',
+              href: 'http://example.com/rels/{rel}',
+              templated: true
+            }]
+          } });
+
+          var link = this.agent.links['ht:users'];
+          var link2 = this.agent.links['http://example.com/rels/user'];
+
+          assert(link);
+          assert.deepEqual(link, link2);
+        });
+
+        it('should not make expanded CURIES enumerable', function () {
+          this.agent._load({ _links: {
+            'ht:users': { href: '/users/' },
+            curies: [{
+              name: 'ht',
+              href: 'http://example.com/rels/{rel}',
+              templated: true
+            }]
+          } });
+
+          var links = Object.keys(this.agent.links);
+          assert.deepEqual(links, ['ht:users']);
+        });
+      });
     });
 
   });
