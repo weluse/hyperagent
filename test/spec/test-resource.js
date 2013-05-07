@@ -141,6 +141,11 @@
         var keys = Object.keys(this.agent.links);
         assert.deepEqual(keys, ['self', 'orders']);
       });
+
+      describe('Templated Links', function () {
+        it.skip('should expand links');
+      });
     });
+
   });
 }());
