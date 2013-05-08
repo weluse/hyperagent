@@ -116,7 +116,24 @@ var api = new Resource({
   url: 'https://api.example.com/',
   headers: { 'Accept': 'application/vnd.example.com.hal+json' },
   username: 'foo',
-  password: 'bar'
+  password: 'bar',
+  ajax: {
+    foo: 'bar'
+  }
+});
+```
+
+The options `username`, `password`, `headers` as well as any additional options
+in `ajax` will be passed on to the AJAX implementation. For example, the above
+request would call the underlying AJAX function with these parameters:
+
+```javascript
+config.ajax({
+  url: 'https://api.example.com/',
+  headers: { 'Accept': 'application/vnd.example.com.hal+json' },
+  username: 'foo',
+  password: 'bar',
+  foo: 'bar'
 });
 ```
 
