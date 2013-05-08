@@ -1,3 +1,4 @@
+/*jshint browser:true */
 /*global describe, it, assert, Hyperagent, beforeEach, fixtures */
 'use strict';
 (function () {
@@ -25,7 +26,7 @@
 
       var agent = new Hyperagent.Resource('https://example.com');
       assert.equal(this.ajaxCalls.length, 0);
-      var promise = agent.fetch().then(function (result) {
+      agent.fetch().then(function (result) {
         assert.equal(agent, result);
         assert.equal(agent.props.welcome, 'Welcome to a haltalk server.');
         assert.equal(agent.embedded['ht:post'].length, 2);
@@ -43,7 +44,7 @@
 
       var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
       assert.equal(this.ajaxCalls.length, 0);
-      var promise = agent.fetch().then(function (result) {
+      agent.fetch().then(function () {
         return agent.embedded['ht:post'][0].fetch();
       }).then(function (post) {
         assert.equal(this.ajaxCalls.length, 2);
