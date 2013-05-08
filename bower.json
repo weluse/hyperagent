@@ -2,10 +2,8 @@
   "name": "hyperagent",
   "version": "0.0.0",
   "dependencies": {
-    "rsvp": "~1.2.0",
     "q": "~0.9.3",
     "jquery": "~2.0.0",
-    "underscore": "~1.4.4",
     "uri.js": "~1.10.2"
   },
   "devDependencies": {

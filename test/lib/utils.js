@@ -23,3 +23,16 @@ if (!Function.prototype.bind) {
     return fBound;
   };
 }
+
+var _ = _ || {
+  pairs: function (obj) {
+    var result = [];
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        result.push([key, obj[key]]);
+      }
+    }
+
+    return result;
+  }
+};
