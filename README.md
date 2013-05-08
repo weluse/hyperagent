@@ -14,9 +14,8 @@ HAL itself stabilizes.
 
 During development, there are a few requirements (see [issue #4](https://github.com/passy/hyperagent/issues/4)):
 
-- jQuery (\*)
+- jQuery or Zepto (\*)
 - Q (\*)
-- underscore (\*)
 - URI.js (+ URITemplate.js)
 
 \* These are soft dependencies and can be replaced with compatible
@@ -212,20 +211,20 @@ assert.deepEqual(link1, link2);
 
 ### configure
 
-Hyperagent depends on an underscore, an AJAX and a Promise/A+ implementation, which
-are replaceable as long as they implement the common interface. The default
-implementations are:
+Hyperagent depends on an AJAX and a Promise/A+ implementation,
+which are replaceable as long as they implement the common interface. The
+default implementations are:
 
-- `_` -- `window._`
 - `ajax` -- `window.$.ajax`
 - `defer` -- `window.Q.defer`
+- `_` -- `Hyperagent.miniscore` (based on underscore.js)
 
 You can use the `configure` function to override those defaults:
 
 ```javascript
-Hyperagent.configure('_', lodash);
 Hyperagent.configure('ajax', reqwest);
 Hyperagent.configure('defer', RSVP.Promise);
+Hyperagent.configure('_', lodash);
 ```
 
 ### Resource#url()
