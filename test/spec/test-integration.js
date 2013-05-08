@@ -53,23 +53,5 @@
         assert.equal(post.links['ht:author'].props.title, 'Mike Amundsen');
       }.bind(this)).then(done, done);
     });
-
-    it('should not remove links after loading', function () {
-      this.ajaxResponses.push(JSON.stringify(fixtures.subDoc));
-
-      this.agent._load({ _links: {
-        self: {
-          href: 'http://example.com/self'
-        },
-        users: [
-          { href: '/1' },
-          { href: '/2' },
-          { href: '/3' },
-        ]
-      }});
-      assert.equal(this.agent.links.users.length, 3);
-      this.agent.links.users[1].fetch();
-      assert.equal(this.agent.links.users.length, 3, 'Should stay at 3 users');
-    });
   });
 }());
