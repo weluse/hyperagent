@@ -1,25 +1,24 @@
 # hyperagent.js
 
-A JavaScript library running ~~both on NodeJS and~~ in the browser for consuming
-[HAL] hypermedia APIs. NodeJS support is postponed until browser support is
-stabilized.
+hyperagent.js is a JavScript library for consuming [HAL] hypermedia APIs in the
+browser.
 
 ## Compatibility
 
 hyperagent aims to be compatible with draft 5 of the HAL specification. As the
-spec is still being developed, hypermedia is unlikely to have a stable API until
-HAL itself stabilizes.
+spec is still being developed, hyperagent.js is unlikely to have a stable API
+until HAL itself stabilizes.
 
 ## Dependencies
 
-During development, there are a few requirements (see [issue #4](https://github.com/passy/hyperagent/issues/4)):
+hyperagent.js has one hard and two soft dependencies:
 
-- jQuery or Zepto (\*)
-- Q (\*)
 - URI.js (+ URITemplate.js)
+- A jQuery-compatible AJAX implementation (e.g jQuery, zepto, reqwest), *default*:
+  jQuery
+- A Promise/A+ implementation (e.g Q, RSVP), *default*: Q
 
-\* These are soft dependencies and can be replaced with compatible
-implementations. See `configure` below for more information.
+To use other than the default implementations, see `configure` below.
 
 ## Example
 
