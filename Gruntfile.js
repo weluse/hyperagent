@@ -80,6 +80,10 @@ module.exports = function (grunt) {
       unit: {
         configFile: 'karma.conf.js',
         singleRun: true
+      },
+      ci: {
+        configFile: 'karma-ci.conf.js',
+        singleRun: true
       }
     },
 
@@ -136,7 +140,12 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'build',
-    'karma'
+    'karma:unit'
+  ]);
+
+  grunt.registerTask('test-ci', [
+    'build',
+    'karma:ci'
   ]);
 
   grunt.registerTask('default', [
