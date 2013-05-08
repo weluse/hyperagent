@@ -1,0 +1,11 @@
+{
+  "name": "sample",
+  "version": "0.0.0",
+  "dependencies": {
+    "bootstrap": "~2.3.1",
+    "jquery": "~1.8.0",
+    "q": "~0.9.3",
+    "uri.js": "~1.10.2",
+    "angular": "~1.0.6"
+  }
+}
