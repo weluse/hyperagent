@@ -1,7 +1,5 @@
 'use strict';
 
-var path = require('path');
-
 module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -78,13 +76,11 @@ module.exports = function (grunt) {
       }
     },
 
-    mocha: {
-      all: {
-        options: {
-          run: true,
-          urls: ['http://localhost:<%= connect.options.port %>/test/']
-        }
-      },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true
+      }
     },
 
     concat: {
@@ -133,8 +129,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', [
     'build',
-    'connect:test',
-    'mocha'
+    'karma'
   ]);
 
   grunt.registerTask('default', [
