@@ -38,11 +38,8 @@
               </li>
               <li ng-show="!users.length">Loading …</li>
               <div ng-repeat="user in users">
-                <!-- When the link is not fetched, we can display the title, but
-                since the (loaded) user resource does not define a title
-                attribute, we fall back to the real_name once available. -->
-                <li class="active"><a ng-click="navigateToUser(user)"
-                    href="#">{{ user.props.title || user.props.real_name }}</a></li>
+                <li class="active"><a ng-click="navigateToUser(user, $event)"
+                    href="#">{{ user.props.title }}</a></li>
               </div>
             </ul>
           </div>

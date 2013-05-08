@@ -37,7 +37,10 @@ module.controller('HALCtrl', function HALCtrl($scope, $location, HALTalkResource
     });
   });
 
-  $scope.navigateToUser = function (user) {
+  $scope.navigateToUser = function (user, $event) {
+    if ($event) {
+      $event.preventDefault();
+    }
     user.fetch().then(function () {
       $scope.$apply(function () {
         $scope.user = user;
