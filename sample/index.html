@@ -8,17 +8,15 @@
       padding-top: 60px;
       padding-bottom: 40px;
     }
+
     .sidebar-nav {
       padding: 9px 0;
     }
 
-    @media (max-width: 980px) {
-      /* Enable use of floated navbar text */
-      .navbar-text.pull-right {
-        float: none;
-        padding-left: 5px;
-        padding-right: 5px;
-      }
+    /* A hack allowing us to put all messages into one .row-fluid without
+    worrying of splitting them up. */
+    .row-fluid [class*="span4"]:nth-child(4n + 4) {
+      margin-left: 0;
     }
   </style>
   <body>
@@ -48,21 +46,18 @@
             <h1>HALTalk</h1>
             <p>HALTalk is an example for an API implementing the HAL standard.</p>
           </div>
-          <p class="alert alert-info" ng-hide="selectedUser">
+          <p class="alert alert-info" ng-hide="user || users.length == 0">
             Select a user on the left to load their posts.
           </p>
 
-          <h2>Mike Kelly</h2>
+          <div ng-show="user">
+            <h2>{{ user.props.title }}</h2>
 
-          <div class="row-fluid">
-            <div class="span4">
-              <p>Awesome! Good too see someone figured out how to post something!! ;)</p>
-            </div>
-            <div class="span4">
-              <p>Awesome! Good too see someone figured out how to post something!! ;)</p>
-            </div>
-            <div class="span4">
-              <p>Awesome! Good too see someone figured out how to post something!! ;)</p>
+            <p class="alert alert-info" ng-show="!posts.length">Loading messages …</p>
+            <div class="row-fluid">
+              <div class="span4" ng-repeat="post in posts">
+                <p>{{ post.props.content }}</p>
+              </div>
             </div>
           </div>
         </div>
