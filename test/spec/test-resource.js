@@ -168,6 +168,18 @@
         assert.deepEqual(keys, ['self', 'orders']);
       });
 
+      it('should not override pre-loaded link properties', function () {
+        this.agent._load(fixtures.extendedLink);
+        var orders = this.agent.links.orders;
+        assert.equal(orders.props.title, 'Orders');
+        orders._load({
+          description: 'Some fancy list of orders.'
+        });
+        assert.equal(orders.props.title, 'Orders',
+          'title attribute should still be there');
+        assert.equal(orders.props.description, 'Some fancy list of orders.');
+      });
+
       describe('Templated Links', function () {
         it('should expand links', function () {
           this.agent._load({ _links: {

@@ -143,3 +143,14 @@ window.fixtures.simpleLink = {
     }
   }
 };
+
+window.fixtures.extendedLink = {
+  "_links": {
+    "self": { "href": "/" },
+    "orders": {
+      "href": "https://example.com/orders/",
+      "profile": "http://schema.org/IndividualProduct",
+      "title": "Orders"
+    }
+  }
+};
