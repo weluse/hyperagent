@@ -111,6 +111,12 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.lib %>/{,**/}*.js', 'test/**/*.js'],
         tasks: ['build']
       }
+    },
+
+    open: {
+      test: {
+        path: 'http://localhost:<%= connect.options.port %>/test/'
+      }
     }
   });
 
@@ -124,6 +130,7 @@ module.exports = function (grunt) {
   // Create an alias familiar to those using webapp/angular.
   grunt.registerTask('server', [
     'connect:test',
+    'open',
     'watch'
   ]);
 
