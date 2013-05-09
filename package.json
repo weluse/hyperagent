@@ -15,7 +15,8 @@
     "grunt-devtools": "~0.1.0-7",
     "karma-mocha": "0.0.1",
     "grunt-karma": "~0.4.4",
-    "grunt-open": "~0.2.0"
+    "grunt-open": "~0.2.0",
+    "coveralls": "~2.0.7"
   },
   "engines": {
     "node": ">=0.8.0"
