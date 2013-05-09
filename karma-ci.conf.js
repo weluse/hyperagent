@@ -22,9 +22,18 @@ files = [
 // list of files to exclude
 exclude = [];
 
+preprocessors = {
+  'dist/hyperagent.js': 'coverage'
+};
+
 // test results reporter to use
 // possible values: dots || progress || growl
-reporters = ['progress'];
+reporters = ['coverage'];
+
+coverageReporter = {
+  type: 'lcov',
+  dir: 'coverage/'
+}
 
 // web server port
 port = 8080;
