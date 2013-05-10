@@ -1,0 +1,252 @@
+@import "layout/*.png"
+@import "colors"
+
+$DEFAULT_PADDING: 15px
+
+html
+    height: 100%
+    font-size: 62.5%
+
+body
+    +font-size(16px)
+    margin: 0
+    height: 100%
+
+    > .container
+        // Bubble height to allow min-height on content
+        height: 100%
+
+a
+    text-decoration: none
+
+hr.global
+    position: fixed
+    left: 0
+    bottom: 0
+
+    border: none
+    border-bottom: 3px solid $C_HIGHLIGHT
+
+    margin: 0
+    width: 100%
+
+*, ::before, ::after
+    +box-sizing(border-box)
+
+// ============== //
+// RESPONSIVENESS //
+=responsive-content($margin: true)
+    max-width: 960px
+    margin: 0 auto
+
+    @media screen and (max-width: 999px)
+        max-width: 960px
+        @if $margin
+            margin: 20px
+
+    @media screen and (max-width: 640px)
+        max-width: 600px
+        @if $margin
+            margin: 20px
+
+
+=responsive-columns
+    p
+        width: 30%
+        float: left
+        margin-left: 5%
+
+        &:first-child
+            margin-left: 0
+
+    &:after
+        display: block
+        content: ""
+        clear: both
+
+    @media screen and (max-width: 999px) and (min-width: 641px)
+        p
+            width: 40%
+            float: left
+            margin-left: 5%
+            margin-right: 5%
+
+            &:first-child
+                margin-left: 5%
+                margin-right: 5%
+
+        &:after
+            display: block
+            content: ""
+            clear: both
+
+    @media screen and (max-width: 640px)
+        p
+            width: 100%
+            float: none
+            margin-left: 0
+
+// ============== //
+
+// ====== //
+// HEADER //
+// ====== //
+
+
+[role=banner]
+    // Remove when using grids!
+    +responsive-content
+    position: relative
+    line-height: 1
+    min-height: 5em
+
+    @media screen and (min-width: 641px)
+        padding:
+            top: 1em
+            bottom: 1em
+
+    @media screen and (min-width: 800px)
+        padding:
+            top: 3em
+            bottom: 1em
+
+    @media screen and (max-width: 640px)
+        text-align: center
+        margin-top: 0.5em
+
+    .site-logo
+        width: 120px
+        height: 50px
+
+        position: absolute
+        right: 0
+        bottom: 1em
+
+        @media screen and (max-width: 640px)
+            position: static
+            margin: 1em auto
+
+[role=navigation]
+    ul
+        list-style-type: none
+        margin: 0
+        padding: 0
+
+    li
+        text-transform: uppercase
+        display: inline-block
+
+        @media screen and (min-width: 501px)
+            &:before
+                color: $C_HEADLINE
+                font-weight: bold
+                content: "| "
+                font-size: 95%
+                vertical-align: top
+
+            &:first-child
+                &:before
+                    content: ""
+
+        &.active a
+            color: $C_HIGHLIGHT
+
+
+        @media screen and (max-width: 500px)
+            display: block
+            padding: 0.5em 0
+
+            border-bottom: 1px solid $C_FILL
+
+            &:first-child
+                border-top: 1px solid $C_FILL
+
+[role=main]
+    background: image_url("bg_tile.png") repeat
+    clear: both
+    min-height: 80%
+
+    border-top: 1px solid $C_FILL
+
+    @media screen and (max-width: 500px)
+        border-top: none
+
+    > .content
+        +responsive-content
+
+
+[role=contentinfo]
+    +responsive-content
+    padding-bottom: 1em
+    $radius: 3em
+    text-align: center
+
+    ul
+        padding: 0
+
+    li
+        +border-radius($radius / 2)
+        +single-transition(background-color, 0.3s)
+
+        list-style-type: none
+        display: inline-block
+        margin: 0
+
+        width: $radius
+        height: $radius
+        background-color: $C_HEADLINE
+        background-color: transparentize($C_HEADLINE, 0.75)
+
+        &:hover
+            background-color: transparentize($C_HEADLINE, 0.5)
+
+        a
+            display: inline-block
+            // Should match the average sprite to keep the items in line
+            // even w/o an actual icon.
+            width: 100%
+            height: 100%
+
+            &:after
+                content: ""
+                display: inline-block
+                // This is magic, adjust if necessary or build some true centering.
+                margin-top: $radius * 0.2
+
+    $icons: impress message twitter
+    @each $name in $icons
+        .footer-#{$name} a
+            &:after
+                $local-name: "footer_#{$name}"
+                width: layout-sprite-width($local-name)
+                height: layout-sprite-width($local-name)
+                +layout-sprite($local-name)
+
+
+// =================
+// REUSABLE ELEMENTS
+// =================
+
+.prose
+    +responsive-columns
+
+    strong
+        text-transform: uppercase
+
+    p
+        margin-top: 0
+        text-align: justify
+
+.chromeframe
+    position: relative
+    top: 1em
+    width: 80%
+
+    background: lighten($C_HIGHLIGHT, 25%)
+    border: 1px solid $C_HIGHLIGHT
+    padding: 1em
+    text-align: center
+
+    margin: 0 auto
+
+@import "syntax"

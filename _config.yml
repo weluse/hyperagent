@@ -1,2 +1,4 @@
-name: Your New Jekyll Site
+safe: false
+lsi: false
 pygments: true
+markdown: redcarpet

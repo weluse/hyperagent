@@ -1,0 +1,30 @@
+h1
+    +font-size(30pt)
+    color: $C_HEADLINE
+
+body
+    +font-size(12pt)
+    line-height: 1.5
+    color: $C_TEXT
+    font-family: Arimo, Helvetica, Arial, sans-serif
+
+h1, h2, h3
+    font-family: "Droid Serif", "Georgia", "Times New Roman", serif
+    font-weight: normal
+
+    @media screen and (max-width: 640px)
+        text-align: center
+
+h1, h2
+    margin: 0
+
+h1
+    text-align: center
+    padding: 1.5em 0
+
+a
+    color: $C_HEADLINE
+    font-weight: bold
+
+    &:hover
+        color: $C_HIGHLIGHT
