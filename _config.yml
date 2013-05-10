@@ -5,6 +5,8 @@ markdown: redcarpet
 
 navigation:
 - text: API
-  url: /
+  url: /index.html
+  link: /
 - text: Contributing
-  url: /contributing
+  url: /contributing/index.html
+  link: /contributing

@@ -10,21 +10,21 @@
 
     <!-- Included CSS Files -->
     <link rel="stylesheet" href="/stylesheets/screen.css">
-    <link href="https://fonts.googleapis.com/css?family=Arimo:400,700,400italic|Droid+Serif" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Arimo:400,700,400italic|Droid+Serif" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header role="banner">
             <img class="site-logo" src="/images/hyperagent.svg" alt="hyperagent">
             <nav role="navigation">
-                {% for link in site.navigation %}
-                    {% assign current = '' %}
-                    {% if page.url == link.url or page.layout == link.layout %}
-                    {% assign active = 'active' %}
+                {% for entry in site.navigation %}
+                    {% assign active = '' %}
+                    {% if page.url == entry.url %}
+                        {% assign active = 'active' %}
                     {% endif %}
 
-                    <li class="{{ current }}">
-                        <a href="{{ link.url }}">{{ link.text }}</a>
+                    <li class="{{ active }}">
+                        <a href="{{ entry.link }}">{{ entry.text }}</a>
                     </li>
                 {% endfor %}
             </nav>
@@ -38,7 +38,7 @@
 
         <footer role="contentinfo">
             <ul>
-                <li class="footer-impress"><a href="https://weluse.de/contact"></a></li>
+                <li class="footer-impress"><a href="https://weluse.de/contact" target="_blank"></a></li>
                 <li class="footer-message"><a href="mailto:phartig@weluse.de"></a></li>
                 <li class="footer-twitter"><a href="https://twitter.com/passy" target="_blank"></a></li>
             </ul>

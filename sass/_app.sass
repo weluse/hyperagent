@@ -11,10 +11,9 @@ body
     +font-size(16px)
     margin: 0
     height: 100%
-
-    > .container
-        // Bubble height to allow min-height on content
-        height: 100%
+> .container
+    // Bubble height to allow min-height on content
+    height: 100%
 
 a
     text-decoration: none
@@ -115,8 +114,8 @@ hr.global
         margin-top: 0.5em
 
     .site-logo
-        width: 281px
-        height: 33px
+        width: 210px
+        height: 22px
 
         position: absolute
         right: 0
@@ -237,16 +236,15 @@ hr.global
         margin-top: 0
         text-align: justify
 
-.chromeframe
-    position: relative
-    top: 1em
-    width: 80%
+// =============
+// CONTENT HACKS
+// =============
 
-    background: lighten($C_HIGHLIGHT, 25%)
-    border: 1px solid $C_HIGHLIGHT
-    padding: 1em
-    text-align: center
+.content.index
+    h1:not(.intro)
+        display: none
 
-    margin: 0 auto
+        + p
+            display: none
 
 @import "syntax"
