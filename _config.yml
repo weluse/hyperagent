@@ -2,6 +2,7 @@ safe: false
 lsi: false
 pygments: true
 markdown: redcarpet
+baseurl: /hyperagent/
 
 navigation:
 - text: API

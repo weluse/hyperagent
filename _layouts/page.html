@@ -9,13 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Included CSS Files -->
-    <link rel="stylesheet" href="/stylesheets/screen.css">
+    <link rel="stylesheet" href="{{ site.baseurl }}/stylesheets/screen.css">
     <link href="//fonts.googleapis.com/css?family=Arimo:400,700,400italic|Droid+Serif" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header role="banner">
-            <img class="site-logo" src="/images/hyperagent.svg" alt="hyperagent">
+            <img class="site-logo" src="{{ site.baseurl }}/images/hyperagent.svg" alt="hyperagent">
             <nav role="navigation">
                 {% for entry in site.navigation %}
                     {% assign active = '' %}
@@ -52,7 +52,7 @@
                 <li class="footer-twitter"><a href="https://twitter.com/passy" target="_blank"></a></li>
             </ul>
             <a href="https://weluse.de/" target="_blank">
-                <img src="/images/weluse.svg" alt="weluse Logo"><br>
+                <img src="{{ site.baseurl }}/images/weluse.svg" alt="weluse Logo"><br>
                 <small>Powered by weluse</small>
             </p>
         </footer>
