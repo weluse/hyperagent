@@ -24,7 +24,7 @@
                     {% endif %}
 
                     <li class="{{ active }}">
-                        <a href="{{ entry.link }}">{{ entry.text }}</a>
+                        <a href="{{ site.baseurl }}{{ entry.link }}">{{ entry.text }}</a>
                     </li>
                 {% endfor %}
             </nav>
@@ -34,7 +34,7 @@
             <aside class="dlbar">
                 <h2>Get it</h2>
                 <ul>
-                    <li><a class="button download" href="/install/">Download</a></li>
+                    <li><a class="button download" href="{{ site.baseurl }}/install/">Download</a></li>
                     <li><a class="button github" href="https://github.com/weluse/hyperagent">View On GitHub</a></li>
                 </ul>
 
