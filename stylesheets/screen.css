@@ -366,6 +366,7 @@ hr.global {
   float: left;
   position: fixed;
   width: 15em;
+  min-height: 8em;
   background-color: #171717;
   color: #fdfdfb;
   border: 1px solid black;
@@ -383,7 +384,7 @@ hr.global {
     margin: 1em auto;
     border-radius: 4px;
   }
-  /* line 252, ../sass/_app.sass */
+  /* line 253, ../sass/_app.sass */
   .dlbar ul {
     position: absolute;
     right: 1em;
@@ -391,12 +392,39 @@ hr.global {
     margin: 0;
   }
 }
-/* line 267, ../sass/_app.sass */
+@media screen and (max-width: 790px) {
+  /* line 260, ../sass/_app.sass */
+  .dlbar p {
+    display: none;
+  }
+}
+@media screen and (max-width: 475px) {
+  /* line 240, ../sass/_app.sass */
+  .dlbar {
+    width: 90%;
+  }
+  /* line 266, ../sass/_app.sass */
+  .dlbar ul {
+    position: static;
+    margin: 0 auto;
+    text-align: center;
+  }
+  /* line 271, ../sass/_app.sass */
+  .dlbar li {
+    display: inline-block;
+    text-align: left;
+  }
+  /* line 275, ../sass/_app.sass */
+  .dlbar h2, .dlbar p {
+    display: none;
+  }
+}
+/* line 287, ../sass/_app.sass */
 .dlbar ul {
   list-style: none;
   padding: 0;
 }
-/* line 271, ../sass/_app.sass */
+/* line 291, ../sass/_app.sass */
 .dlbar li {
   width: 12em;
   height: 30px;
@@ -413,7 +441,7 @@ hr.global {
   border: 1px solid #0d0d0d;
   box-shadow: inset 0px 1px 1px 0 #e90226;
 }
-/* line 286, ../sass/_app.sass */
+/* line 306, ../sass/_app.sass */
 .dlbar li:hover {
   background: #c3001d;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c3001d), color-stop(100%, #950119));
@@ -422,12 +450,12 @@ hr.global {
   background: -o-linear-gradient(top, #c3001d 0%, #950119 100%);
   background: linear-gradient(top, #c3001d 0%, #950119 100%);
 }
-/* line 290, ../sass/_app.sass */
+/* line 310, ../sass/_app.sass */
 .dlbar p {
   margin: 0.5em 0;
 }
 
-/* line 293, ../sass/_app.sass */
+/* line 313, ../sass/_app.sass */
 .button {
   font-weight: normal;
   text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
@@ -436,25 +464,25 @@ hr.global {
   display: block;
   color: white;
 }
-/* line 301, ../sass/_app.sass */
+/* line 321, ../sass/_app.sass */
 .button.download {
   background-position: 0 -160px;
 }
-/* line 304, ../sass/_app.sass */
+/* line 324, ../sass/_app.sass */
 .button.github {
   background-position: 0 -141px;
 }
 
-/* line 308, ../sass/_app.sass */
+/* line 328, ../sass/_app.sass */
 .button:hover {
   color: white;
 }
 
-/* line 316, ../sass/_app.sass */
+/* line 336, ../sass/_app.sass */
 .content.index h1:not(.intro) {
   display: none;
 }
-/* line 319, ../sass/_app.sass */
+/* line 339, ../sass/_app.sass */
 .content.index h1:not(.intro) + p {
   display: none;
 }

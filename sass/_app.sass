@@ -241,6 +241,7 @@ hr.global
     float: left
     position: fixed
     width: 15em
+    min-height: 8em
 
     @media screen and (max-width: 1480px)
         float: none
@@ -254,6 +255,25 @@ hr.global
             right: 1em
             top: 34px
             margin: 0
+
+    @media screen and (max-width: 790px)
+        p
+            display: none
+
+    @media screen and (max-width: 475px)
+        width: 90%
+
+        ul
+            position: static
+            margin: 0 auto
+            text-align: center
+
+        li
+            display: inline-block
+            text-align: left
+
+        h2, p
+            display: none
 
 
     background-color: #171717
