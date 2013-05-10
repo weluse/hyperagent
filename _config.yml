@@ -2,3 +2,9 @@ safe: false
 lsi: false
 pygments: true
 markdown: redcarpet
+
+navigation:
+- text: API
+  url: /
+- text: Contributing
+  url: /contributing

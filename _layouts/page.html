@@ -15,9 +15,18 @@
 <body>
     <div class="container">
         <header role="banner">
-            <img class="site-logo" src="/images/weluse.svg" alt="weluse" width=120 height=50>
+            <img class="site-logo" src="/images/hyperagent.svg" alt="hyperagent">
             <nav role="navigation">
-                <li><a href="/" class="active">hyperagent.js</a></li>
+                {% for link in site.navigation %}
+                    {% assign current = '' %}
+                    {% if page.url == link.url or page.layout == link.layout %}
+                    {% assign active = 'active' %}
+                    {% endif %}
+
+                    <li class="{{ current }}">
+                        <a href="{{ link.url }}">{{ link.text }}</a>
+                    </li>
+                {% endfor %}
             </nav>
         </header>
 
