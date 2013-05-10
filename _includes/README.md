@@ -96,7 +96,8 @@ The following JSON response represents the entry point of
 Using defaults:
 
 ```javascript
-var api = new Hyperagent.Resource('https://api.example.com/');
+var Resource = require('hyperagent').Resource;
+var api = new Resource('https://api.example.com/');
 
 api.fetch().then(function (root) {
   console.log('API root resolved:', root);
