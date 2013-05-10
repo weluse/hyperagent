@@ -266,6 +266,11 @@ A boolean indicating whether the resource has been completely loaded or is
 potentially incomplete. Resources retrieved via `fetched()` and embedded
 resources are considered as fully loaded.
 
+### Resource#links
+
+An object, containing links with their rel as key. Links are resources, lazily
+created on access or arrays of links.
+
 ### Resource#link(rel[, params])
 
 Creates a new link resource identified by the given `rel` and expands the link
@@ -283,6 +288,15 @@ Calling with parameters:
 var link = api.link('me', { username: 'sindresorhus' });
 assert(link.url() === 'http://example.com/users/sindresorhus');
 ```
+
+### Resource#embedded
+
+An object containing all embedded resource, created lazily on access.
+
+### Resources#props
+
+An object containing all properties on the current resource. This includes all
+properties of the resource, except `_links` and `_embedded`.
 
 ## FAQ
 
