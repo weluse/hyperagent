@@ -1,9 +1,7 @@
-<div class="intro">
 # hyperagent.js
 
 hyperagent.js is a JavScript library for consuming [HAL] hypermedia APIs in the
 browser.
-</div>
 
 ## Compatibility
 
