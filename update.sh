@@ -7,3 +7,9 @@ done
 bundle
 bundle exec compass compile --relative-assets
 bundle exec jekyll build
+
+for dir in dist sample; do
+  git checkout master -- $dist
+done
+
+cd sample; bower install; cd ..

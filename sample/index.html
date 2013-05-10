@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" ng-app="hal">
+  <meta charset="utf-8">
+  <title>HALTalk + hyperagent.js = ♥</title>
+  <link rel="stylesheet" href="components/bootstrap/docs/assets/css/bootstrap.css">
+  <style>
+    body {
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+
+    .sidebar-nav {
+      padding: 9px 0;
+    }
+
+    /* A hack allowing us to put all messages into one .row-fluid without
+    worrying of splitting them up. */
+    .row-fluid [class*="span4"]:nth-child(4n + 4) {
+      margin-left: 0;
+    }
+  </style>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#">HALTalk</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid" ng-controller="HALCtrl">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Users
+                <span ng-show="users.length">({{ users.length }})</span>
+              </li>
+              <li ng-show="!users.length">Loading …</li>
+              <div ng-repeat="user in users">
+                <li class="active"><a ng-click="navigateToUser(user, $event)"
+                    href="#">{{ user.props.title }}</a></li>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div class="span9">
+          <div class="hero-unit">
+            <h1>HALTalk</h1>
+            <p>HALTalk is an example for an API implementing the HAL standard.</p>
+          </div>
+          <p class="alert alert-info" ng-hide="user || users.length == 0">
+            Select a user on the left to load their posts.
+          </p>
+
+          <div ng-show="user">
+            <h2>{{ user.props.real_name }}</h2>
+
+            <p class="alert alert-info" ng-show="posts == null">Loading messages …</p>
+            <p class="alert alert-warning" ng-show="posts.length == 0">This
+              users hasn't posted any messaged yet.</p>
+            <div class="row-fluid">
+              <div class="span4" ng-repeat="post in posts">
+                <p>{{ post.props.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="components/uri.js/src/URI.js"></script>
+    <script src="components/uri.js/src/URITemplate.js"></script>
+    <script src="components/q/q.js"></script>
+    <script src="components/jquery/jquery.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <script src="../dist/hyperagent.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
