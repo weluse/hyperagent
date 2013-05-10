@@ -3,4 +3,4 @@ layout: page
 title: Contributing
 ---
 
-{% include README.md %}
+{% include CONTRIBUTING.md %}
