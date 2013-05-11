@@ -101,7 +101,10 @@ Resource.prototype._load = function _load(object) {
   }
 
   // Must come after _loadCuries
-  this.props = new Properties(object, { curies: this.curies });
+  this.props = new Properties(object, {
+    curies: this.curies,
+    original: this.props
+  });
 };
 
 /**

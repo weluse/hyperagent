@@ -302,6 +302,8 @@ define('hyperagent/properties',
       if (Object(response) !== response) {
         throw new Error('The Properties argument must be an object.');
       }
+      // Overwrite the response object with the original properties if provided.
+      c._.extend(response, options.original || {});
 
       var skipped = ['_links', '_embedded'];
       Object.keys(response).forEach(function (key) {
@@ -434,7 +436,10 @@ define('hyperagent/resource',
       }
 
       // Must come after _loadCuries
-      this.props = new Properties(object, { curies: this.curies });
+      this.props = new Properties(object, {
+        curies: this.curies,
+        original: this.props
+      });
     };
 
     /**
