@@ -21,6 +21,8 @@
     "lib/",
     "sample/",
     "test/",
-    "dist/*.min.js"
+    "dist/*.min.js",
+    "dist/commonjs",
+    "package.json"
   ]
 }
