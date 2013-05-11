@@ -13,7 +13,7 @@ for dir in dist sample; do
 done
 
 bundle
-bundle exec compass compile --relative-assets
+bundle exec compass compile --relative-assets --force
 bundle exec jekyll build
 
 cd sample; bower install; cd ..
