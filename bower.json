@@ -20,6 +20,7 @@
     "karma*.js",
     "lib/",
     "sample/",
-    "test/"
+    "test/",
+    "dist/*.min.js"
   ]
 }
