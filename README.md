@@ -20,6 +20,12 @@ hyperagent.js has one hard and two soft dependencies:
 
 To use other than the default implementations, see `configure` below.
 
+## Demo
+
+You can see the library in action in the
+[live sample application](http://weluse.github.io/hyperagent/sample/) and check
+out the source in [`sample/`](https://github.com/weluse/hyperagent/tree/master/sample).
+
 ## Example
 
 The following JSON response represents the entry point of
