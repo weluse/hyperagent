@@ -8,7 +8,6 @@ files = [
   MOCHA,
   MOCHA_ADAPTER,
   'components/chai/chai.js',
-  'components/underscore/underscore.js',
   'components/uri.js/src/URI.js',
   'components/uri.js/src/URITemplate.js',
   'components/q/q.js',
@@ -28,7 +27,7 @@ preprocessors = {
 
 // test results reporter to use
 // possible values: dots || progress || growl
-reporters = ['coverage'];
+reporters = ['coverage', 'progress'];
 
 coverageReporter = {
   type: 'lcov',
