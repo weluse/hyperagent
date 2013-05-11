@@ -219,7 +219,7 @@ root.link('ht:me', { name: 'mike' }).fetch().then(function (user) {
 });
 ```
 
-Using the `url()` accessor, you can get the absolute of the resource you are
+Using the `url()` accessor, you can get the absolute URL of the resource you are
 accessing:
 
 ```javascript
