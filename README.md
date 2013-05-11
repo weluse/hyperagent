@@ -7,7 +7,7 @@ browser.
 ## Installation
 
 Download with bower or alternatively
-[install manually](https://weluse.github.io/hyperagent/install/).
+[install manually](http://weluse.github.io/hyperagent/install/).
 
 ```bash
 bower install hyperagent
