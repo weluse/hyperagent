@@ -1,4 +1,5 @@
-# hyperagent.js [![Build Status](https://secure.travis-ci.org/weluse/hyperagent.png?branch=master)](https://travis-ci.org/weluse/hyperagent)
+# hyperagent.js [![Build Status](https://secure.travis-ci.org/weluse/hyperagent.png?branch=master)](https://travis-ci.org/weluse/hyperagent) [![Coverage Status](https://coveralls.io/repos/weluse/hyperagent/badge.png?branch=master)](https://coveralls.io/r/weluse/hyperagent?branch=master)
+
 
 hyperagent.js is a JavScript library for consuming [HAL] hypermedia APIs in the
 browser.
