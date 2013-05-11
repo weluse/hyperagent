@@ -13,13 +13,13 @@
   "ignore": [
     "**/*.md",
     ".editorconfig",
-    ".gitattributes"
+    ".gitattributes",
     ".gitignore",
     ".travis.yml",
     "Gruntfile.js",
     "karma*.js",
     "lib/",
     "sample/",
-    "test/",
+    "test/"
   ]
 }
