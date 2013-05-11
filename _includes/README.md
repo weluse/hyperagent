@@ -1,7 +1,17 @@
-# hyperagent.js
+# hyperagent.js [![Build Status](https://secure.travis-ci.org/weluse/hyperagent.png?branch=master)](https://travis-ci.org/weluse/hyperagent) [![Coverage Status](https://coveralls.io/repos/weluse/hyperagent/badge.png?branch=master)](https://coveralls.io/r/weluse/hyperagent?branch=master)
 
-hyperagent.js is a JavScript library for consuming [HAL] hypermedia APIs in the
+
+hyperagent.js is a JavaScript library for consuming [HAL] hypermedia APIs in the
 browser.
+
+## Installation
+
+Download with bower or alternatively
+[install manually](http://weluse.github.io/hyperagent/install/).
+
+```bash
+bower install hyperagent
+```
 
 ## Compatibility
 
@@ -13,10 +23,11 @@ until HAL itself stabilizes.
 
 hyperagent.js has one hard and two soft dependencies:
 
-- URI.js (+ URITemplate.js)
-- A jQuery-compatible AJAX implementation (e.g jQuery, zepto, reqwest), *default*:
+- [URI.js](http://medialize.github.io/URI.js/) (+ URITemplate.js)
+- A jQuery-compatible AJAX implementation (e.g [jQuery](http://jquery.com/),
+  [zepto](http://zeptojs.com/), [reqwest](https://github.com/ded/reqwest)), *default*:
   jQuery
-- A Promise/A+ implementation (e.g Q, RSVP), *default*: Q
+- A Promise/A+ implementation (e.g [q](http://documentup.com/kriskowal/q/), [RSVP.js](https://github.com/tildeio/rsvp.js)), *default*: q
 
 To use other than the default implementations, see `configure` below.
 

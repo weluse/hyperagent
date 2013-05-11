@@ -14,3 +14,17 @@ bower install --save hyperagent
   * [Download jQuery](http://jquery.com/)
   * [Download q](http://documentup.com/kriskowal/q/)
   * [Download URI.js](http://medialize.github.io/URI.js/)
+
+## Integration
+
+
+```html
+<script src="components/uri.js/src/URI.js"></script>
+<script src="components/uri.js/src/URITemplate.js"></script>
+<script src="components/q/q.js"></script>
+<script src="components/hyperagent/dist/hyperagent.js"></script>
+
+<script>
+  var api = new Hyperagent.Resource('https://example.com/');
+</script>
+```
