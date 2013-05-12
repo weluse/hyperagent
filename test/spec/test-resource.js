@@ -144,6 +144,11 @@
         this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
       });
 
+      it('should be cached', function () {
+        this.agent._load({ _links: { orders: { href: 'http://example.com/orders' } } });
+        assert.equal(this.agent.links.orders, this.agent.links.orders);
+      });
+
       it('should expose their props', function () {
         this.agent._load({ _links: { self: { href: 'http://example.com/self' } } });
         assert.equal(this.agent.links.self.props.href, 'http://example.com/self');
