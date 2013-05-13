@@ -236,5 +236,23 @@
       });
     });
 
+    describe('loadHooks', function () {
+      afterEach(function () {
+        Hyperagent.configure('loadHooks', []);
+      });
+
+      it('should have configurable loadHooks', function () {
+
+        var myHook = function (object) {
+          assert.equal(object._links.self.href, 'http://example.com/');
+          this.awesome = true;
+        };
+
+        Hyperagent.configure('loadHooks', [myHook]);
+        var agent = new Hyperagent.Resource('http://example.com/');
+        agent._load({ _links: { self: { href: 'http://example.com/' } } });
+        assert(agent.awesome);
+      });
+    });
   });
 }());
