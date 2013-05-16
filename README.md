@@ -229,7 +229,7 @@ assert(url === 'http://haltalk.herokuapp.com/signup');
 
 ### Curies
 
-Curies are supported in that you can access links, properties and embedded
+[Curies] are supported in that you can access links, properties and embedded
 resources either with their short form or the expanded link, which means the
 following two statements are equivalent:
 
@@ -329,6 +329,7 @@ callback-based API.
 
   [RFC6570]: http://tools.ietf.org/html/rfc6570
   [HAL]: http://tools.ietf.org/html/draft-kelly-json-hal-05
+  [Curies]: http://www.w3.org/TR/curie/
 
 ## License
 
