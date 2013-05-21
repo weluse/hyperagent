@@ -45,12 +45,46 @@
       var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
       assert.equal(this.ajaxCalls.length, 0);
       agent.fetch().then(function () {
-        return agent.embedded['ht:post'][0].fetch();
+        return agent.embedded['ht:post'][0].fetch({ force: true});
       }).then(function (post) {
         assert.equal(this.ajaxCalls.length, 2);
         assert.equal(post.props.content, 'having fun w/ the HAL Talk explorer');
         assert.equal(post.url(), 'http://haltalk.herokuapp.com' + post.links.self.props.href);
         assert.equal(post.links['ht:author'].props.title, 'Mike Amundsen');
+      }.bind(this)).then(done, done);
+    });
+
+    it('should fetch the same resource only once', function (done) {
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+      // Shouldn't be needed, but makes errors prettier.
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+      assert.equal(this.ajaxCalls.length, 0);
+
+      agent.fetch().then(function () {
+        assert.equal(this.ajaxCalls.length, 1);
+        return agent.fetch();
+      }.bind(this)).then(function () {
+        assert.equal(this.ajaxCalls.length, 1,
+          'Should not request cached resource twice.');
+        assert.equal(agent.embedded['ht:post'][0].props.content,
+          'having fun w/ the HAL Talk explorer');
+      }.bind(this)).then(done, done);
+    });
+
+    it('should fetch the same resource again if forced', function (done) {
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+      assert.equal(this.ajaxCalls.length, 0);
+
+      agent.fetch().then(function () {
+        assert.equal(this.ajaxCalls.length, 1);
+        return agent.fetch({ force: true });
+      }.bind(this)).then(function () {
+        assert.equal(this.ajaxCalls.length, 2);
       }.bind(this)).then(done, done);
     });
   });
