@@ -62,10 +62,10 @@
       var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
       assert.equal(this.ajaxCalls.length, 0);
 
-      agent.fetch().then(function () {
+      agent.fetch().then(function (agent) {
         assert.equal(this.ajaxCalls.length, 1);
         return agent.fetch();
-      }.bind(this)).then(function () {
+      }.bind(this)).then(function (agent) {
         assert.equal(this.ajaxCalls.length, 1,
           'Should not request cached resource twice.');
         assert.equal(agent.embedded['ht:post'][0].props.content,
