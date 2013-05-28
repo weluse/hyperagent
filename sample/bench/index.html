@@ -6,7 +6,8 @@
 <script src="../../dist/hyperagent.js"></script>
 <script src="zero.js"></script>
 
-<button id="go">Run!</button>
+<label for=run-count><input type=number id=run-count value=1000>
+<button id=go>Run!</button>
 
 <script>
   !function () {
@@ -17,7 +18,6 @@
         }
       }
     }
-    var RUNS = 1000;
     var FIXTURE = JSON.stringify({
       "_links": {
         "self": {
@@ -106,17 +106,18 @@
     }
 
     function bench() {
+      var runCount = parseInt(document.getElementById('run-count').value, 10);
       var count = 0;
       var done = function done() {
         count += 1;
-        if (count === RUNS) {
+        if (count === runCount) {
           console.profileEnd('bench');
         }
       };
 
       setup();
       console.profile('bench');
-      for (var i = 0; i < RUNS; i += 1) {
+      for (var i = 0; i < runCount; i += 1) {
         fullRun(done);
       }
     }
