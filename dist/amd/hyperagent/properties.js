@@ -1,6 +1,6 @@
 define(
   ["hyperagent/config","exports"],
-  function(c, __exports__) {
+  function(config, __exports__) {
     "use strict";
 
     function Properties(response, options) {
@@ -12,11 +12,11 @@ define(
         throw new Error('The Properties argument must be an object.');
       }
       // Overwrite the response object with the original properties if provided.
-      c._.extend(response, options.original || {});
+      config._.extend(response, options.original || {});
 
       var skipped = ['_links', '_embedded'];
       Object.keys(response).forEach(function (key) {
-        if (!c._.contains(skipped, key)) {
+        if (!config._.contains(skipped, key)) {
           this[key] = response[key];
         }
       }.bind(this));

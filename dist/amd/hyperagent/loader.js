@@ -1,11 +1,11 @@
 define(
   ["hyperagent/config","exports"],
-  function(c, __exports__) {
+  function(config, __exports__) {
     "use strict";
 
     function loadAjax(options) {
-      var deferred = c.defer();
-      c.ajax(c._.extend(options, {
+      var deferred = config.defer();
+      config.ajax(config._.extend(options, {
         headers: {
           'Accept': 'application/hal+json, application/json, */*; q=0.01',
           'X-Requested-With': 'XMLHttpRequest'
