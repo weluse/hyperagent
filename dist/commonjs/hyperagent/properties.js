@@ -1,5 +1,5 @@
 "use strict";
-var c = require("hyperagent/config");
+var config = require("hyperagent/config");
 
 function Properties(response, options) {
   // XXX: This function is too large. Let's figure out if we could instead build
@@ -10,11 +10,11 @@ function Properties(response, options) {
     throw new Error('The Properties argument must be an object.');
   }
   // Overwrite the response object with the original properties if provided.
-  c._.extend(response, options.original || {});
+  config._.extend(response, options.original || {});
 
   var skipped = ['_links', '_embedded'];
   Object.keys(response).forEach(function (key) {
-    if (!c._.contains(skipped, key)) {
+    if (!config._.contains(skipped, key)) {
       this[key] = response[key];
     }
   }.bind(this));

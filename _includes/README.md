@@ -227,9 +227,21 @@ var url = root.links['ht:signup'].url();
 assert(url === 'http://haltalk.herokuapp.com/signup');
 ```
 
+By default, `fetch()` only requests the resource once from the server and
+directly returns a promise on the cached result on successive calls. If you want
+to force a refresh from the server, you can set the `force` flag in an options
+object:
+
+```javascript
+root.links['ht:users'].fetch().then(...);
+
+// Enforce a refresh.
+root.links['ht:users'].fetch({ force: true }).then(...);
+```
+
 ### Curies
 
-Curies are supported in that you can access links, properties and embedded
+[Curies] are supported in that you can access links, properties and embedded
 resources either with their short form or the expanded link, which means the
 following two statements are equivalent:
 
@@ -329,6 +341,7 @@ callback-based API.
 
   [RFC6570]: http://tools.ietf.org/html/rfc6570
   [HAL]: http://tools.ietf.org/html/draft-kelly-json-hal-05
+  [Curies]: http://www.w3.org/TR/curie/
 
 ## License
 

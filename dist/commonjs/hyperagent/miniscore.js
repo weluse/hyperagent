@@ -32,31 +32,6 @@ _.each = _.forEach = function (obj, iterator, context) {
   }
 };
 
-_.identity = function (val) {
-  return val;
-};
-
-_.any = function (obj, iterator, context) {
-  var result = false;
-  if (!iterator) {
-    iterator = _.identity;
-  }
-
-  if (obj === null || obj === undefined) {
-    return result;
-  }
-  if (obj.some === Array.prototype.some) {
-    return obj.some(iterator, context);
-  }
-
-  _.each(obj, function (value, index, list) {
-    if (result || (result = iterator.call(context, value, index, list))) {
-      return breaker;
-    }
-  });
-  return !!result;
-};
-
 _.contains = function (obj, target) {
   if (obj === null || obj === undefined) {
     return false;

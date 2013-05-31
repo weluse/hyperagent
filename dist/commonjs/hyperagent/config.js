@@ -8,6 +8,7 @@ if (typeof window !== 'undefined') {
   config.ajax = window.$ && window.$.ajax.bind(window.$);
   config.defer = window.Q && window.Q.defer;
   config._ = _;
+  config.loadHooks = [];
 }
 
 

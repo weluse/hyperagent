@@ -34,7 +34,7 @@ var define, requireModule;
 
 define('hyperagent',
   ["hyperagent/resource","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, config, __exports__) {
+  function(__dependency1__, __dependency2__, __dependency3__, _config, __exports__) {
     "use strict";
     var Resource = __dependency1__.Resource;
     var LazyResource = __dependency1__.LazyResource;
@@ -43,7 +43,7 @@ define('hyperagent',
     var CurieStore = __dependency3__.CurieStore;
 
     function configure(name, value) {
-      config[name] = value;
+      _config[name] = value;
     }
 
 
@@ -53,6 +53,7 @@ define('hyperagent',
     __exports__.LinkResource = LinkResource;
     __exports__.CurieStore = CurieStore;
     __exports__.configure = configure;
+    __exports__._config = _config;
   });
 define('hyperagent/config',
   ["hyperagent/miniscore"],
@@ -66,6 +67,7 @@ define('hyperagent/config',
       config.ajax = window.$ && window.$.ajax.bind(window.$);
       config.defer = window.Q && window.Q.defer;
       config._ = _;
+      config.loadHooks = [];
     }
 
 
@@ -144,12 +146,12 @@ define('hyperagent/curie',
   });
 define('hyperagent/loader',
   ["hyperagent/config","exports"],
-  function(c, __exports__) {
+  function(config, __exports__) {
     "use strict";
 
     function loadAjax(options) {
-      var deferred = c.defer();
-      c.ajax(c._.extend(options, {
+      var deferred = config.defer();
+      config.ajax(config._.extend(options, {
         headers: {
           'Accept': 'application/hal+json, application/json, */*; q=0.01',
           'X-Requested-With': 'XMLHttpRequest'
@@ -200,31 +202,6 @@ define('hyperagent/miniscore',
           }
         }
       }
-    };
-
-    _.identity = function (val) {
-      return val;
-    };
-
-    _.any = function (obj, iterator, context) {
-      var result = false;
-      if (!iterator) {
-        iterator = _.identity;
-      }
-
-      if (obj === null || obj === undefined) {
-        return result;
-      }
-      if (obj.some === Array.prototype.some) {
-        return obj.some(iterator, context);
-      }
-
-      _.each(obj, function (value, index, list) {
-        if (result || (result = iterator.call(context, value, index, list))) {
-          return breaker;
-        }
-      });
-      return !!result;
     };
 
     _.contains = function (obj, target) {
@@ -291,7 +268,7 @@ define('hyperagent/miniscore',
   });
 define('hyperagent/properties',
   ["hyperagent/config","exports"],
-  function(c, __exports__) {
+  function(config, __exports__) {
     "use strict";
 
     function Properties(response, options) {
@@ -303,11 +280,11 @@ define('hyperagent/properties',
         throw new Error('The Properties argument must be an object.');
       }
       // Overwrite the response object with the original properties if provided.
-      c._.extend(response, options.original || {});
+      config._.extend(response, options.original || {});
 
       var skipped = ['_links', '_embedded'];
       Object.keys(response).forEach(function (key) {
-        if (!c._.contains(skipped, key)) {
+        if (!config._.contains(skipped, key)) {
           this[key] = response[key];
         }
       }.bind(this));
@@ -333,15 +310,17 @@ define('hyperagent/properties',
   });
 define('hyperagent/resource',
   ["hyperagent/loader","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, c, __exports__) {
+  function(__dependency1__, __dependency2__, __dependency3__, config, __exports__) {
     "use strict";
     var loadAjax = __dependency1__.loadAjax;
     var Properties = __dependency2__.Properties;
     var CurieStore = __dependency3__.CurieStore;
     /*jshint strict:false, latedef:false */
 
+    var _ = config._;
+
     function Resource(args) {
-      if (args === Object(args)) {
+      if (Object(args) === args) {
         this._options = args;
       } else {
         this._options = { url: args };
@@ -353,6 +332,13 @@ define('hyperagent/resource',
       this.links = {};
       this.curies = new CurieStore();
 
+      // Set up default loadHooks and add configurables to the end.
+      this._loadHooks = [
+        this._loadLinks,
+        this._loadEmbedded,
+        this._loadProperties
+      ].concat(config.loadHooks);
+
       this.loaded = false;
     }
 
@@ -362,15 +348,44 @@ define('hyperagent/resource',
       };
     };
 
-    Resource.prototype.fetch = function fetch() {
-      // Pick only AJAX-relevant options.
-      var options = c._.pick(this._options, 'headers', 'username',
-          'password', 'url');
-      if (this._options.ajax) {
-        c._.extend(options, this._options.ajax);
+    /**
+     * Fetch the resource from server at the resource's URL using the `loadAjax`
+     * module. By default the following instance options are passed to the AJAX
+     * function:
+     *
+     * - headers
+     * - username
+     * - password
+     * - url (not directly set by the user)
+     *
+     * In addition, all options from `options.ajax` are mixed in.
+     *
+     * Parameters:
+     * - options:
+     *   - force: defaults to false, whether to force a new request if the result is
+     *   cached, i. e this resource is already marked as `loaded`.
+     *
+     * Returns a promise on the this Resource instance.
+     */
+    Resource.prototype.fetch = function fetch(options) {
+      options = _.defaults(options || {}, { force: false });
+
+      if (this.loaded && !options.force) {
+        // Could use Q sugar here, but that would break compatibility with other
+        // Promise/A+ implementations.
+        var deferred = config.defer();
+        deferred.resolve(this);
+        return deferred.promise;
       }
 
-      return loadAjax(options).then(function _ajaxThen(response) {
+      // Pick only AJAX-relevant options.
+      var ajaxOptions = _.pick(this._options, 'headers', 'username',
+          'password', 'url');
+      if (this._options.ajax) {
+        _.extend(ajaxOptions, this._options.ajax);
+      }
+
+      return loadAjax(ajaxOptions).then(function _ajaxThen(response) {
         this._parse(response);
         this.loaded = true;
 
@@ -408,7 +423,10 @@ define('hyperagent/resource',
       this._load(object);
     };
 
-    Resource.prototype._load = function _load(object) {
+    /**
+     * Loads the Resource.links resources on creation of the object.
+     */
+    Resource.prototype._loadLinks = function _loadLinks(object) {
       // HAL actually defines this as OPTIONAL
       if (object._links) {
         if (object._links.curies) {
@@ -427,19 +445,36 @@ define('hyperagent/resource',
           curies: this.curies
         });
       }
+    };
 
+    /**
+     * Loads the Resource.embedded resources on creation of the object.
+     */
+    Resource.prototype._loadEmbedded = function _loadEmbedded(object) {
       if (object._embedded) {
         this.embedded = new LazyResource(this, object._embedded, {
           factory: Resource.factory(EmbeddedResource),
           curies: this.curies
         });
       }
+    };
 
+
+    /**
+     * Loads the Resource.props resources on creation of the object.
+     */
+    Resource.prototype._loadProperties = function _loadProperties(object) {
       // Must come after _loadCuries
       this.props = new Properties(object, {
         curies: this.curies,
         original: this.props
       });
+    };
+
+    Resource.prototype._load = function _load(object) {
+      this._loadHooks.forEach(function (hook) {
+        hook.bind(this)(object);
+      }.bind(this));
     };
 
     /**
@@ -488,8 +523,8 @@ define('hyperagent/resource',
      * given `object` on access in a Resource.
      *
      * Arguments:
-     *  - parentResource: the resource this one depends is created from
-     *    extract a custom URL value.
+     *  - parentResource: the parent resource the new lazy one inherits its options
+     *    from
      *  - object: the object to wrap
      *  - options: optional options
      *    - factory: A function taking a the object and the options to wrap inside a
@@ -497,7 +532,7 @@ define('hyperagent/resource',
      */
     function LazyResource(parentResource, object, options) {
       this._parent = parentResource;
-      this._options = c._.defaults(options || {}, {
+      this._options = _.defaults(options || {}, {
         factory: function (object, options) {
           var resource = new Resource(options);
           resource._load(object);
@@ -517,7 +552,7 @@ define('hyperagent/resource',
         }
       });
 
-      c._.each(object, function (obj, key) {
+      _.each(object, function (obj, key) {
         if (Array.isArray(obj)) {
           this._setLazyArray(key, obj, true);
         } else {
@@ -528,7 +563,7 @@ define('hyperagent/resource',
       // Again for curies
       var curies = this._options.curies;
       if (curies && !curies.empty()) {
-        c._.each(object, function (obj, key) {
+        _.each(object, function (obj, key) {
           if (curies.canExpand(key)) {
             var expanded = curies.expand(key);
 
@@ -565,10 +600,14 @@ define('hyperagent/resource',
     LazyResource.prototype._makeGetter = function _makeGetter(object) {
       var parent = this._parent;
       var options = this._options;
+      var instance;
 
       return function () {
-        return new options.factory(object, c._.clone(parent._options));
-      }.bind(this);
+        if (instance === undefined) {
+          instance = new options.factory(object, _.clone(parent._options));
+        }
+        return instance;
+      };
     };
 
 
@@ -582,7 +621,7 @@ define('hyperagent/resource',
       this.loaded = true;
     }
 
-    c._.extend(EmbeddedResource.prototype, Resource.prototype);
+    _.extend(EmbeddedResource.prototype, Resource.prototype);
 
     function LinkResource(object, options) {
       // Inherit from Resource
@@ -602,7 +641,7 @@ define('hyperagent/resource',
       this._load(object);
     }
 
-    c._.extend(LinkResource.prototype, Resource.prototype);
+    _.extend(LinkResource.prototype, Resource.prototype);
 
     LinkResource.prototype.expand = function (params) {
       if (!this.templated) {

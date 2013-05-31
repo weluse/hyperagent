@@ -1,12 +1,14 @@
 "use strict";
-var c = require("hyperagent/config");
+var config = require("hyperagent/config");
 var loadAjax = require("hyperagent/loader").loadAjax;
 var Properties = require("hyperagent/properties").Properties;
 var CurieStore = require("hyperagent/curie").CurieStore;
 /*jshint strict:false, latedef:false */
 
+var _ = config._;
+
 function Resource(args) {
-  if (args === Object(args)) {
+  if (Object(args) === args) {
     this._options = args;
   } else {
     this._options = { url: args };
@@ -18,6 +20,13 @@ function Resource(args) {
   this.links = {};
   this.curies = new CurieStore();
 
+  // Set up default loadHooks and add configurables to the end.
+  this._loadHooks = [
+    this._loadLinks,
+    this._loadEmbedded,
+    this._loadProperties
+  ].concat(config.loadHooks);
+
   this.loaded = false;
 }
 
@@ -27,15 +36,44 @@ Resource.factory = function (Cls) {
   };
 };
 
-Resource.prototype.fetch = function fetch() {
-  // Pick only AJAX-relevant options.
-  var options = c._.pick(this._options, 'headers', 'username',
-      'password', 'url');
-  if (this._options.ajax) {
-    c._.extend(options, this._options.ajax);
+/**
+ * Fetch the resource from server at the resource's URL using the `loadAjax`
+ * module. By default the following instance options are passed to the AJAX
+ * function:
+ *
+ * - headers
+ * - username
+ * - password
+ * - url (not directly set by the user)
+ *
+ * In addition, all options from `options.ajax` are mixed in.
+ *
+ * Parameters:
+ * - options:
+ *   - force: defaults to false, whether to force a new request if the result is
+ *   cached, i. e this resource is already marked as `loaded`.
+ *
+ * Returns a promise on the this Resource instance.
+ */
+Resource.prototype.fetch = function fetch(options) {
+  options = _.defaults(options || {}, { force: false });
+
+  if (this.loaded && !options.force) {
+    // Could use Q sugar here, but that would break compatibility with other
+    // Promise/A+ implementations.
+    var deferred = config.defer();
+    deferred.resolve(this);
+    return deferred.promise;
   }
 
-  return loadAjax(options).then(function _ajaxThen(response) {
+  // Pick only AJAX-relevant options.
+  var ajaxOptions = _.pick(this._options, 'headers', 'username',
+      'password', 'url');
+  if (this._options.ajax) {
+    _.extend(ajaxOptions, this._options.ajax);
+  }
+
+  return loadAjax(ajaxOptions).then(function _ajaxThen(response) {
     this._parse(response);
     this.loaded = true;
 
@@ -73,7 +111,10 @@ Resource.prototype._parse = function _parse(response) {
   this._load(object);
 };
 
-Resource.prototype._load = function _load(object) {
+/**
+ * Loads the Resource.links resources on creation of the object.
+ */
+Resource.prototype._loadLinks = function _loadLinks(object) {
   // HAL actually defines this as OPTIONAL
   if (object._links) {
     if (object._links.curies) {
@@ -92,19 +133,36 @@ Resource.prototype._load = function _load(object) {
       curies: this.curies
     });
   }
+};
 
+/**
+ * Loads the Resource.embedded resources on creation of the object.
+ */
+Resource.prototype._loadEmbedded = function _loadEmbedded(object) {
   if (object._embedded) {
     this.embedded = new LazyResource(this, object._embedded, {
       factory: Resource.factory(EmbeddedResource),
       curies: this.curies
     });
   }
+};
 
+
+/**
+ * Loads the Resource.props resources on creation of the object.
+ */
+Resource.prototype._loadProperties = function _loadProperties(object) {
   // Must come after _loadCuries
   this.props = new Properties(object, {
     curies: this.curies,
     original: this.props
   });
+};
+
+Resource.prototype._load = function _load(object) {
+  this._loadHooks.forEach(function (hook) {
+    hook.bind(this)(object);
+  }.bind(this));
 };
 
 /**
@@ -153,8 +211,8 @@ Resource.prototype._navigateUrl = function _navigateUrl(value) {
  * given `object` on access in a Resource.
  *
  * Arguments:
- *  - parentResource: the resource this one depends is created from
- *    extract a custom URL value.
+ *  - parentResource: the parent resource the new lazy one inherits its options
+ *    from
  *  - object: the object to wrap
  *  - options: optional options
  *    - factory: A function taking a the object and the options to wrap inside a
@@ -162,7 +220,7 @@ Resource.prototype._navigateUrl = function _navigateUrl(value) {
  */
 function LazyResource(parentResource, object, options) {
   this._parent = parentResource;
-  this._options = c._.defaults(options || {}, {
+  this._options = _.defaults(options || {}, {
     factory: function (object, options) {
       var resource = new Resource(options);
       resource._load(object);
@@ -182,7 +240,7 @@ function LazyResource(parentResource, object, options) {
     }
   });
 
-  c._.each(object, function (obj, key) {
+  _.each(object, function (obj, key) {
     if (Array.isArray(obj)) {
       this._setLazyArray(key, obj, true);
     } else {
@@ -193,7 +251,7 @@ function LazyResource(parentResource, object, options) {
   // Again for curies
   var curies = this._options.curies;
   if (curies && !curies.empty()) {
-    c._.each(object, function (obj, key) {
+    _.each(object, function (obj, key) {
       if (curies.canExpand(key)) {
         var expanded = curies.expand(key);
 
@@ -230,10 +288,14 @@ LazyResource.prototype._setLazyArray = function _setLazy(key, array, enumerable)
 LazyResource.prototype._makeGetter = function _makeGetter(object) {
   var parent = this._parent;
   var options = this._options;
+  var instance;
 
   return function () {
-    return new options.factory(object, c._.clone(parent._options));
-  }.bind(this);
+    if (instance === undefined) {
+      instance = new options.factory(object, _.clone(parent._options));
+    }
+    return instance;
+  };
 };
 
 
@@ -247,7 +309,7 @@ function EmbeddedResource(object, options) {
   this.loaded = true;
 }
 
-c._.extend(EmbeddedResource.prototype, Resource.prototype);
+_.extend(EmbeddedResource.prototype, Resource.prototype);
 
 function LinkResource(object, options) {
   // Inherit from Resource
@@ -267,7 +329,7 @@ function LinkResource(object, options) {
   this._load(object);
 }
 
-c._.extend(LinkResource.prototype, Resource.prototype);
+_.extend(LinkResource.prototype, Resource.prototype);
 
 LinkResource.prototype.expand = function (params) {
   if (!this.templated) {

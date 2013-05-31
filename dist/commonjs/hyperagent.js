@@ -1,5 +1,5 @@
 "use strict";
-var config = require("hyperagent/config");
+var _config = require("hyperagent/config");
 var __dependency1__ = require("hyperagent/resource");
 var Resource = __dependency1__.Resource;
 var LazyResource = __dependency1__.LazyResource;
@@ -8,7 +8,7 @@ var Properties = require("hyperagent/properties").Properties;
 var CurieStore = require("hyperagent/curie").CurieStore;
 
 function configure(name, value) {
-  config[name] = value;
+  _config[name] = value;
 }
 
 
@@ -18,3 +18,4 @@ exports.LazyResource = LazyResource;
 exports.LinkResource = LinkResource;
 exports.CurieStore = CurieStore;
 exports.configure = configure;
+exports._config = _config;
