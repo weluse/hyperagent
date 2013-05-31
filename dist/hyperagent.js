@@ -34,7 +34,7 @@ var define, requireModule;
 
 define('hyperagent',
   ["hyperagent/resource","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, config, __exports__) {
+  function(__dependency1__, __dependency2__, __dependency3__, _config, __exports__) {
     "use strict";
     var Resource = __dependency1__.Resource;
     var LazyResource = __dependency1__.LazyResource;
@@ -43,7 +43,7 @@ define('hyperagent',
     var CurieStore = __dependency3__.CurieStore;
 
     function configure(name, value) {
-      config[name] = value;
+      _config[name] = value;
     }
 
 
@@ -53,6 +53,7 @@ define('hyperagent',
     __exports__.LinkResource = LinkResource;
     __exports__.CurieStore = CurieStore;
     __exports__.configure = configure;
+    __exports__._config = _config;
   });
 define('hyperagent/config',
   ["hyperagent/miniscore"],
@@ -522,8 +523,8 @@ define('hyperagent/resource',
      * given `object` on access in a Resource.
      *
      * Arguments:
-     *  - parentResource: the resource this one depends is created from
-     *    extract a custom URL value.
+     *  - parentResource: the parent resource the new lazy one inherits its options
+     *    from
      *  - object: the object to wrap
      *  - options: optional options
      *    - factory: A function taking a the object and the options to wrap inside a

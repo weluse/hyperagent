@@ -213,8 +213,8 @@ define(
      * given `object` on access in a Resource.
      *
      * Arguments:
-     *  - parentResource: the resource this one depends is created from
-     *    extract a custom URL value.
+     *  - parentResource: the parent resource the new lazy one inherits its options
+     *    from
      *  - object: the object to wrap
      *  - options: optional options
      *    - factory: A function taking a the object and the options to wrap inside a
