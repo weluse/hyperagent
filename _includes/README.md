@@ -327,6 +327,15 @@ An object containing all embedded resource, created lazily on access.
 An object containing all properties on the current resource. This includes all
 properties of the resource, except `_links` and `_embedded`.
 
+### Resource.resolveUrl(oldUrl, newUrl)
+
+Combines an old with a new URL:
+
+```javascript
+var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
+assert.equal(res, 'http://example.com/bar');
+```
+
 ## FAQ
 
 ### Promises?

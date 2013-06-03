@@ -72,7 +72,7 @@ The Q module can be loaded as:
     the [q](https://npmjs.org/package/q) package
 -   An AMD module
 -   A [component](https://github.com/component/component) as ``microjs/q``
--   Using [bower](http://twitter.github.com/bower/) as ``microjs/q``
+-   Using [bower](http://bower.io/) as ``q``
 -   Using [NuGet](http://nuget.org/) as [Q](https://nuget.org/packages/q)
 
 Q can exchange promises with jQuery, Dojo, When.js, WinJS, and more.
@@ -547,12 +547,12 @@ function requestOkText(url) {
         if (request.status === 200) {
             deferred.resolve(request.responseText);
         } else {
-            onerror();
+            deferred.reject(new Error("Status code was " + request.status));
         }
     }
 
     function onerror() {
-        deferred.reject("Can't XHR " + JSON.stringify(url));
+        deferred.reject(new Error("Can't XHR " + JSON.stringify(url)));
     }
 
     function onprogress(event) {
@@ -563,6 +563,21 @@ function requestOkText(url) {
 }
 ```
 
+Below is an example of how to use this ``requestOkText`` function:
+
+```javascript
+requestOkText("http://localhost:3000")
+.then(function (responseText) {
+    // If the HTTP response returns 200 OK, log the response text.
+    console.log(responseText);
+}, function (error) {
+    // If there's an error or a non-200 status code, log the error.
+    console.error(error);
+}, function (progress) {
+    // Log the progress as it comes in.
+    console.log("Request progress: " + Math.round(progress * 100) + "%");
+});
+```
 
 ### The Middle
 
