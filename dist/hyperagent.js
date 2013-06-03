@@ -495,27 +495,30 @@ define('hyperagent/resource',
       }.bind(this));
     };
 
+    Resource.resolveUrl = function _resolveUrl(oldUrl, newUrl) {
+      if (!newUrl) {
+        throw new Error('Expected absolute or relative URL, but got: ' + newUrl);
+      }
+
+      var uri = new URI(newUrl);
+      if (uri.is('absolute')) {
+        // Replace the current url if it's absolute
+        return uri.normalize().toString();
+      } else if (newUrl[0] === '/') {
+        return (new URI(oldUrl))
+          .resource(newUrl).normalize().toString();
+      } else {
+        return new URI([oldUrl, newUrl].join('/'))
+          .normalize().toString();
+      }
+    };
+
     /**
      * Updates the internal URL to the new, relative change. This is not an
      * idempotent function.
      */
     Resource.prototype._navigateUrl = function _navigateUrl(value) {
-      if (!value) {
-        throw new Error('Expected absolute or relative URL, but got: ' + value);
-      }
-
-      var uri = new URI(value);
-      if (uri.is('absolute')) {
-        // Replace the current url if it's absolute
-        this._options.url = uri.normalize().toString();
-      } else if (value[0] === '/') {
-        this._options.url = (new URI(this._options.url))
-          .resource(value).normalize().toString();
-      } else {
-        // TODO: Handle relative changes
-        this._options.url = new URI([this._options.url, value].join('/'))
-          .normalize().toString();
-      }
+      this._options.url = Resource.resolveUrl(this._options.url, value);
     };
 
     /**
