@@ -14,6 +14,12 @@
       assert(agent.fetch);
     });
 
+    it('should resolve URLs', function () {
+      var result = Hyperagent.Resource.resolveUrl('http://example.com/foo',
+        '/bar');
+      assert.equal(result, 'http://example.com/bar');
+    });
+
     it('should return its url', function () {
       var agent = new Hyperagent.Resource('http://example.com/');
       assert(agent.url(), 'http://example.com/');
