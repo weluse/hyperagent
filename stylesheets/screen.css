@@ -59,7 +59,7 @@ a:hover {
 
 /* line 82, layout/*.png */
 .layout-sprite, [role=contentinfo] .footer-impress a:after, [role=contentinfo] .footer-message a:after, [role=contentinfo] .footer-twitter a:after, .button.download, .button.github {
-  background: url('../images/layout-s88542c9f69.png') no-repeat;
+  background: url('/images/layout-s88542c9f69.png') no-repeat;
 }
 
 /* line 7, ../sass/_app.sass */
@@ -207,7 +207,7 @@ hr.global {
 
 /* line 164, ../sass/_app.sass */
 [role=main] {
-  background: url('../images/bg_tile.png?1370294601') repeat;
+  background: url('/images/bg_tile.png?1370294601') repeat;
   clear: both;
   min-height: 80%;
   border-top: 1px solid #e3e3e2;
@@ -403,9 +403,15 @@ hr.global {
     margin: 0;
   }
 }
-@media screen and (max-width: 790px) {
+@media screen and (max-width: 1150px) {
   /* line 269, ../sass/_app.sass */
-  .dlbar p {
+  .dlbar span {
+    display: none;
+  }
+}
+@media screen and (max-width: 790px) {
+  /* line 273, ../sass/_app.sass */
+  .dlbar p, .dlbar var {
     display: none;
   }
 }
@@ -414,32 +420,32 @@ hr.global {
   .dlbar {
     width: 90%;
   }
-  /* line 275, ../sass/_app.sass */
+  /* line 279, ../sass/_app.sass */
   .dlbar ul {
     position: static;
     margin: 0 auto;
     text-align: center;
   }
-  /* line 280, ../sass/_app.sass */
+  /* line 284, ../sass/_app.sass */
   .dlbar li {
     display: inline-block;
     text-align: left;
   }
-  /* line 284, ../sass/_app.sass */
+  /* line 288, ../sass/_app.sass */
   .dlbar h2, .dlbar p {
     display: none;
   }
 }
-/* line 287, ../sass/_app.sass */
+/* line 291, ../sass/_app.sass */
 .dlbar h2 {
   margin: 0;
 }
-/* line 290, ../sass/_app.sass */
+/* line 294, ../sass/_app.sass */
 .dlbar ul {
   list-style: none;
   padding: 0;
 }
-/* line 294, ../sass/_app.sass */
+/* line 298, ../sass/_app.sass */
 .dlbar li {
   width: 12em;
   height: 30px;
@@ -456,7 +462,7 @@ hr.global {
   border: 1px solid #0d0d0d;
   box-shadow: inset 0px 1px 1px 0 #e90226;
 }
-/* line 309, ../sass/_app.sass */
+/* line 313, ../sass/_app.sass */
 .dlbar li:hover {
   background: #c3001d;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #c3001d), color-stop(100%, #950119));
@@ -465,12 +471,12 @@ hr.global {
   background: -o-linear-gradient(top, #c3001d 0%, #950119 100%);
   background: linear-gradient(top, #c3001d 0%, #950119 100%);
 }
-/* line 313, ../sass/_app.sass */
+/* line 317, ../sass/_app.sass */
 .dlbar p {
   margin: 0.5em 0;
 }
 
-/* line 316, ../sass/_app.sass */
+/* line 320, ../sass/_app.sass */
 .button {
   font-weight: normal;
   text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
@@ -479,25 +485,25 @@ hr.global {
   display: block;
   color: white;
 }
-/* line 324, ../sass/_app.sass */
+/* line 328, ../sass/_app.sass */
 .button.download {
   background-position: 0 -160px;
 }
-/* line 327, ../sass/_app.sass */
+/* line 331, ../sass/_app.sass */
 .button.github {
   background-position: 0 -141px;
 }
 
-/* line 331, ../sass/_app.sass */
+/* line 335, ../sass/_app.sass */
 .button:hover {
   color: white;
 }
 
-/* line 339, ../sass/_app.sass */
+/* line 343, ../sass/_app.sass */
 .content.index h1:not(.intro) {
   display: none;
 }
-/* line 342, ../sass/_app.sass */
+/* line 346, ../sass/_app.sass */
 .content.index h1:not(.intro) + p {
   display: none;
 }
