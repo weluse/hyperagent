@@ -59,7 +59,7 @@ a:hover {
 
 /* line 82, layout/*.png */
 .layout-sprite, [role=contentinfo] .footer-impress a:after, [role=contentinfo] .footer-message a:after, [role=contentinfo] .footer-twitter a:after, .button.download, .button.github {
-  background: url('/images/layout-s88542c9f69.png') no-repeat;
+  background: url('../images/layout-s88542c9f69.png') no-repeat;
 }
 
 /* line 7, ../sass/_app.sass */
@@ -207,7 +207,7 @@ hr.global {
 
 /* line 164, ../sass/_app.sass */
 [role=main] {
-  background: url('/images/bg_tile.png?1370294601') repeat;
+  background: url('../images/bg_tile.png?1370449623') repeat;
   clear: both;
   min-height: 80%;
   border-top: 1px solid #e3e3e2;

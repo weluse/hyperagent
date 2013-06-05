@@ -280,7 +280,7 @@ define('hyperagent/properties',
         throw new Error('The Properties argument must be an object.');
       }
       // Overwrite the response object with the original properties if provided.
-      config._.extend(response, options.original || {});
+      config._.defaults(response, options.original || {});
 
       var skipped = ['_links', '_embedded'];
       Object.keys(response).forEach(function (key) {
@@ -298,7 +298,7 @@ define('hyperagent/properties',
       Object.keys(this).forEach(function (key) {
         if (curies.canExpand(key)) {
           Object.defineProperty(this, curies.expand(key), {
-            enumerable: true, /// XXX
+            enumerable: true,
             value: this[key]
           });
         }
@@ -516,9 +516,18 @@ define('hyperagent/resource',
     /**
      * Updates the internal URL to the new, relative change. This is not an
      * idempotent function.
+     *
+     * Returns a boolean indicating whether the navigation changed the previously
+     * used URL or not.
      */
     Resource.prototype._navigateUrl = function _navigateUrl(value) {
-      this._options.url = Resource.resolveUrl(this._options.url, value);
+      var newUrl = Resource.resolveUrl(this._options.url, value);
+      if (newUrl !== this._options.url) {
+        this._options.url = newUrl;
+        return true;
+      }
+
+      return false;
     };
 
     /**
@@ -652,7 +661,11 @@ define('hyperagent/resource',
       }
 
       var url = (new URI.expand(this.href, params)).toString();
-      this._navigateUrl(url);
+
+      // If expansion triggered a URL change, consider the current data stale.
+      if (this._navigateUrl(url)) {
+        this.loaded = false;
+      }
     };
 
     LinkResource.prototype.toString = function () {

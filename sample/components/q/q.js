@@ -63,13 +63,6 @@
 })(function () {
 "use strict";
 
-var hasStacks = false;
-try {
-    throw new Error();
-} catch (e) {
-    hasStacks = !!e.stack;
-}
-
 // All code after this point will be filtered from stack traces reported
 // by Q.
 var qStartingLine = captureLine();
@@ -260,13 +253,8 @@ var object_keys = Object.keys || function (object) {
 
 var object_toString = uncurryThis(Object.prototype.toString);
 
-function isObject(value) {
-    return value === Object(value);
-}
-
 // generator related shims
 
-// FIXME: Remove this function once ES6 generators are in SpiderMonkey.
 function isStopIteration(exception) {
     return (
         object_toString(exception) === "[object StopIteration]" ||
@@ -274,8 +262,6 @@ function isStopIteration(exception) {
     );
 }
 
-// FIXME: Remove this helper and Q.return once ES6 generators are in
-// SpiderMonkey.
 var QReturnValue;
 if (typeof ReturnValue !== "undefined") {
     QReturnValue = ReturnValue;
@@ -285,21 +271,6 @@ if (typeof ReturnValue !== "undefined") {
     };
 }
 
-// Until V8 3.19 / Chromium 29 is released, SpiderMonkey is the only
-// engine that has a deployed base of browsers that support generators.
-// However, SM's generators use the Python-inspired semantics of
-// outdated ES6 drafts.  We would like to support ES6, but we'd also
-// like to make it possible to use generators in deployed browsers, so
-// we also support Python-style generators.  At some point we can remove
-// this block.
-var hasES6Generators;
-try {
-    new Function("(function* (){ yield 1; })");
-    hasES6Generators = true;
-} catch (e) {
-    hasES6Generators = false;
-}
-
 // long stack traces
 
 Q.longStackJumpLimit = 1;
@@ -307,10 +278,10 @@ Q.longStackJumpLimit = 1;
 var STACK_JUMP_SEPARATOR = "From previous event:";
 
 function makeStackTraceLong(error, promise) {
-    // If possible, transform the error stack trace by removing Node and Q
-    // cruft, then concatenating with the stack trace of `promise`. See #57.
-    if (hasStacks &&
-        promise.stack &&
+    // If possible (that is, if in V8), transform the error stack
+    // trace by removing Node and Q cruft, then concatenating with
+    // the stack trace of the promise we are ``done``ing. See #57.
+    if (promise.stack &&
         typeof error === "object" &&
         error !== null &&
         error.stack &&
@@ -328,7 +299,7 @@ function filterStackString(stackString) {
     for (var i = 0; i < lines.length; ++i) {
         var line = lines[i];
 
-        if (!isInternalFrame(line) && !isNodeFrame(line) && line) {
+        if (!isInternalFrame(line) && !isNodeFrame(line)) {
             desiredLines.push(line);
         }
     }
@@ -340,36 +311,15 @@ function isNodeFrame(stackLine) {
            stackLine.indexOf("(node.js:") !== -1;
 }
 
-function getFileNameAndLineNumber(stackLine) {
-    // Named functions: "at functionName (filename:lineNumber:columnNumber)"
-    // In IE10 function name can have spaces ("Anonymous function") O_o
-    var attempt1 = /at .+ \((.+):(\d+):(?:\d+)\)$/.exec(stackLine);
-    if (attempt1) {
-        return [attempt1[1], Number(attempt1[2])];
-    }
-
-    // Anonymous functions: "at filename:lineNumber:columnNumber"
-    var attempt2 = /at ([^ ]+):(\d+):(?:\d+)$/.exec(stackLine);
-    if (attempt2) {
-        return [attempt2[1], Number(attempt2[2])];
-    }
-
-    // Firefox style: "function@filename:lineNumber or @filename:lineNumber"
-    var attempt3 = /.*@(.+):(\d+)$/.exec(stackLine);
-    if (attempt3) {
-        return [attempt3[1], Number(attempt3[2])];
-    }
-}
-
 function isInternalFrame(stackLine) {
-    var fileNameAndLineNumber = getFileNameAndLineNumber(stackLine);
+    var pieces = /at .+ \((.*):(\d+):\d+\)/.exec(stackLine);
 
-    if (!fileNameAndLineNumber) {
+    if (!pieces) {
         return false;
     }
 
-    var fileName = fileNameAndLineNumber[0];
-    var lineNumber = fileNameAndLineNumber[1];
+    var fileName = pieces[1];
+    var lineNumber = pieces[2];
 
     return fileName === qFileName &&
         lineNumber >= qStartingLine &&
@@ -379,22 +329,24 @@ function isInternalFrame(stackLine) {
 // discover own file name and line number range for filtering stack
 // traces
 function captureLine() {
-    if (!hasStacks) {
-        return;
-    }
+    if (Error.captureStackTrace) {
+        var fileName, lineNumber;
 
-    try {
-        throw new Error();
-    } catch (e) {
-        var lines = e.stack.split("\n");
-        var firstLine = lines[0].indexOf("@") > 0 ? lines[1] : lines[2];
-        var fileNameAndLineNumber = getFileNameAndLineNumber(firstLine);
-        if (!fileNameAndLineNumber) {
-            return;
-        }
+        var oldPrepareStackTrace = Error.prepareStackTrace;
 
-        qFileName = fileNameAndLineNumber[0];
-        return fileNameAndLineNumber[1];
+        Error.prepareStackTrace = function (error, frames) {
+            fileName = frames[1].getFileName();
+            lineNumber = frames[1].getLineNumber();
+        };
+
+        // teases call of temporary prepareStackTrace
+        // JSHint and Closure Compiler generate known warnings here
+        /*jshint expr: true */
+        new Error().stack;
+
+        Error.prepareStackTrace = oldPrepareStackTrace;
+        qFileName = fileName;
+        return lineNumber;
     }
 }
 
@@ -427,21 +379,21 @@ Q.nextTick = nextTick;
  */
 Q.defer = defer;
 function defer() {
-    // if "messages" is an "Array", that indicates that the promise has not yet
+    // if "pending" is an "Array", that indicates that the promise has not yet
     // been resolved.  If it is "undefined", it has been resolved.  Each
-    // element of the messages array is itself an array of complete arguments to
+    // element of the pending array is itself an array of complete arguments to
     // forward to the resolved promise.  We coerce the resolution value to a
-    // promise using the `resolve` function because it handles both fully
+    // promise using the ref promise because it handles both fully
     // resolved values and other promises gracefully.
-    var messages = [], progressListeners = [], resolvedPromise;
+    var pending = [], progressListeners = [], resolvedPromise;
 
     var deferred = object_create(defer.prototype);
     var promise = object_create(makePromise.prototype);
 
     promise.promiseDispatch = function (resolve, op, operands) {
         var args = array_slice(arguments);
-        if (messages) {
-            messages.push(args);
+        if (pending) {
+            pending.push(args);
             if (op === "when" && operands[1]) { // progress operand
                 progressListeners.push(operands[1]);
             }
@@ -453,7 +405,7 @@ function defer() {
     };
 
     promise.valueOf = function () {
-        if (messages) {
+        if (pending) {
             return promise;
         }
         var nearer = valueOf(resolvedPromise);
@@ -463,18 +415,15 @@ function defer() {
         return nearer;
     };
 
-    if (Q.longStackJumpLimit > 0 && hasStacks) {
-        try {
-            throw new Error();
-        } catch (e) {
-            // NOTE: don't try to use `Error.captureStackTrace` or transfer the
-            // accessor around; that causes memory leaks as per GH-111. Just
-            // reify the stack trace as a string ASAP.
-            //
-            // At the same time, cut off the first line; it's always just
-            // "[object Promise]\n", as per the `toString`.
-            promise.stack = e.stack.substring(e.stack.indexOf("\n") + 1);
-        }
+    if (Error.captureStackTrace && Q.longStackJumpLimit > 0) {
+        Error.captureStackTrace(promise, defer);
+
+        // Reify the stack into a string by using the accessor; this prevents
+        // memory leaks as per GH-111. At the same time, cut off the first line;
+        // it's always just "[object Promise]\n", as per the `toString`.
+        promise.stack = promise.stack.substring(
+            promise.stack.indexOf("\n") + 1
+        );
     }
 
     // NOTE: we do the checks for `resolvedPromise` in each method, instead of
@@ -484,13 +433,13 @@ function defer() {
     function become(promise) {
         resolvedPromise = promise;
 
-        array_reduce(messages, function (undefined, message) {
+        array_reduce(pending, function (undefined, pending) {
             nextTick(function () {
-                promise.promiseDispatch.apply(promise, message);
+                promise.promiseDispatch.apply(promise, pending);
             });
         }, void 0);
 
-        messages = void 0;
+        pending = void 0;
         progressListeners = void 0;
     }
 
@@ -694,12 +643,12 @@ function valueOf(value) {
  */
 Q.isPromise = isPromise;
 function isPromise(object) {
-    return isObject(object) && typeof object.promiseDispatch === "function";
+    return object && typeof object.promiseDispatch === "function";
 }
 
 Q.isPromiseAlike = isPromiseAlike;
 function isPromiseAlike(object) {
-    return isObject(object) && typeof object.then === "function";
+    return object && typeof object.then === "function";
 }
 
 /**
@@ -729,16 +678,13 @@ function isRejected(object) {
     return isPromise(object) && "exception" in object;
 }
 
-//// BEGIN UNHANDLED REJECTION TRACKING
-
 // This promise library consumes exceptions thrown in handlers so they can be
 // handled by a subsequent promise.  The exceptions get added to this array when
 // they are created, and removed when they are handled.  Note that in ES6 or
 // shimmed environments, this would naturally be a `Set`.
-var unhandledReasons = [];
+var unhandledReasons = Q.unhandledReasons = [];
 var unhandledRejections = [];
 var unhandledReasonsDisplayed = false;
-var trackUnhandledRejections = true;
 function displayUnhandledReasons() {
     if (
         !unhandledReasonsDisplayed &&
@@ -753,74 +699,21 @@ function displayUnhandledReasons() {
     unhandledReasonsDisplayed = true;
 }
 
-function logUnhandledReasons() {
-    for (var i = 0; i < unhandledReasons.length; i++) {
-        var reason = unhandledReasons[i];
-        if (reason && typeof reason.stack !== "undefined") {
-            console.warn("Unhandled rejection reason:", reason.stack);
-        } else {
-            console.warn("Unhandled rejection reason (no stack):", reason);
+// Show unhandled rejection reasons if Node exits without handling an
+// outstanding rejection.  (Note that Browserify presently produces a process
+// global without the `EventEmitter` `on` method.)
+if (typeof process !== "undefined" && process.on) {
+    process.on("exit", function () {
+        for (var i = 0; i < unhandledReasons.length; i++) {
+            var reason = unhandledReasons[i];
+            if (reason && typeof reason.stack !== "undefined") {
+                console.warn("Unhandled rejection reason:", reason.stack);
+            } else {
+                console.warn("Unhandled rejection reason (no stack):", reason);
+            }
         }
-    }
+    });
 }
-
-function resetUnhandledRejections() {
-    unhandledReasons.length = 0;
-    unhandledRejections.length = 0;
-    unhandledReasonsDisplayed = false;
-
-    if (!trackUnhandledRejections) {
-        trackUnhandledRejections = true;
-
-        // Show unhandled rejection reasons if Node exits without handling an
-        // outstanding rejection.  (Note that Browserify presently produces a
-        // `process` global without the `EventEmitter` `on` method.)
-        if (typeof process !== "undefined" && process.on) {
-            process.on("exit", logUnhandledReasons);
-        }
-    }
-}
-
-function trackRejection(promise, reason) {
-    if (!trackUnhandledRejections) {
-        return;
-    }
-
-    unhandledRejections.push(promise);
-    unhandledReasons.push(reason);
-    displayUnhandledReasons();
-}
-
-function untrackRejection(promise, reason) {
-    if (!trackUnhandledRejections) {
-        return;
-    }
-
-    var at = array_indexOf(unhandledRejections, promise);
-    if (at !== -1) {
-        unhandledRejections.splice(at, 1);
-        unhandledReasons.splice(at, 1);
-    }
-}
-
-Q.resetUnhandledRejections = resetUnhandledRejections;
-
-Q.getUnhandledReasons = function () {
-    // Make a copy so that consumers can't interfere with our internal state.
-    return unhandledReasons.slice();
-};
-
-Q.stopUnhandledRejectionTracking = function () {
-    resetUnhandledRejections();
-    if (typeof process !== "undefined" && process.on) {
-        process.removeListener("exit", logUnhandledReasons);
-    }
-    trackUnhandledRejections = false;
-};
-
-resetUnhandledRejections();
-
-//// END UNHANDLED REJECTION TRACKING
 
 /**
  * Constructs a rejected promise.
@@ -832,18 +725,24 @@ function reject(reason) {
         "when": function (rejected) {
             // note that the error has been handled
             if (rejected) {
-                untrackRejection(this);
+                var at = array_indexOf(unhandledRejections, this);
+                if (at !== -1) {
+                    unhandledRejections.splice(at, 1);
+                    unhandledReasons.splice(at, 1);
+                }
             }
             return rejected ? rejected(reason) : this;
         }
     }, function fallback() {
-        return this;
+        return reject(reason);
     }, function valueOf() {
         return this;
     }, reason, true);
 
     // Note that the reason has not been handled.
-    trackRejection(rejection, reason);
+    displayUnhandledReasons();
+    unhandledRejections.push(rejection);
+    unhandledReasons.push(reason);
 
     return rejection;
 }
@@ -1063,15 +962,10 @@ function spread(promise, fulfilled, rejected) {
 
 /**
  * The async function is a decorator for generator functions, turning
- * them into asynchronous generators.  Although generators are only part
- * of the newest ECMAScript 6 drafts, this code does not cause syntax
- * errors in older engines.  This code should continue to work and will
- * in fact improve over time as the language improves.
- *
- * ES6 generators are currently part of V8 version 3.19 with the
- * --harmony-generators runtime flag enabled.  SpiderMonkey has had them
- * for longer, but under an older Python-inspired form.  This function
- * works on both kinds of generators.
+ * them into asynchronous generators.  This presently only works in
+ * Firefox/Spidermonkey, however, this code does not cause syntax
+ * errors in older engines.  This code should continue to work and
+ * will in fact improve over time as the language improves.
  *
  * Decorates a generator function such that:
  *  - it may yield promises
@@ -1086,6 +980,18 @@ function spread(promise, fulfilled, rejected) {
  *    every following yield until it is caught, or until it escapes
  *    the generator function altogether, and is translated into a
  *    rejection for the promise returned by the decorated generator.
+ *  - in present implementations of generators, when a generator
+ *    function is complete, it throws ``StopIteration``, ``return`` is
+ *    a syntax error in the presence of ``yield``, so there is no
+ *    observable return value. There is a proposal[1] to add support
+ *    for ``return``, which would permit the value to be carried by a
+ *    ``StopIteration`` instance, in which case it would fulfill the
+ *    promise returned by the asynchronous generator.  This can be
+ *    emulated today by throwing StopIteration explicitly with a value
+ *    property.
+ *
+ *  [1]: http://wiki.ecmascript.org/doku.php?id=strawman:async_functions#reference_implementation
+ *
  */
 Q.async = async;
 function async(makeGenerator) {
@@ -1094,30 +1000,16 @@ function async(makeGenerator) {
         // when verb is "throw", arg is an exception
         function continuer(verb, arg) {
             var result;
-            if (hasES6Generators) {
-                try {
-                    result = generator[verb](arg);
-                } catch (exception) {
+            try {
+                result = generator[verb](arg);
+            } catch (exception) {
+                if (isStopIteration(exception)) {
+                    return exception.value;
+                } else {
                     return reject(exception);
                 }
-                if (result.done) {
-                    return result.value;
-                } else {
-                    return when(result.value, callback, errback);
-                }
-            } else {
-                // FIXME: Remove this case when SM does ES6 generators.
-                try {
-                    result = generator[verb](arg);
-                } catch (exception) {
-                    if (isStopIteration(exception)) {
-                        return exception.value;
-                    } else {
-                        return reject(exception);
-                    }
-                }
-                return when(result, callback, errback);
             }
+            return when(result, callback, errback);
         }
         var generator = makeGenerator.apply(this, arguments);
         var callback = continuer.bind(continuer, "send");
@@ -1126,25 +1018,13 @@ function async(makeGenerator) {
     };
 }
 
-// FIXME: Remove this interface once ES6 generators are in SpiderMonkey.
 /**
  * Throws a ReturnValue exception to stop an asynchronous generator.
- *
- * This interface is a stop-gap measure to support generator return
- * values in older Firefox/SpiderMonkey.  In browsers that support ES6
- * generators like Chromium 29, just use "return" in your generator
- * functions.
- *
+ * Only useful presently in Firefox/SpiderMonkey since generators are
+ * implemented.
  * @param value the return value for the surrounding generator
  * @throws ReturnValue exception with the value.
  * @example
- * // ES6 style
- * Q.async(function* () {
- *      var foo = yield getFooPromise();
- *      var bar = yield getBarPromise();
- *      return foo + bar;
- * })
- * // Older SpiderMonkey style
  * Q.async(function () {
  *      var foo = yield getFooPromise();
  *      var bar = yield getBarPromise();

@@ -12,7 +12,7 @@ define(
         throw new Error('The Properties argument must be an object.');
       }
       // Overwrite the response object with the original properties if provided.
-      config._.extend(response, options.original || {});
+      config._.defaults(response, options.original || {});
 
       var skipped = ['_links', '_embedded'];
       Object.keys(response).forEach(function (key) {
@@ -30,7 +30,7 @@ define(
       Object.keys(this).forEach(function (key) {
         if (curies.canExpand(key)) {
           Object.defineProperty(this, curies.expand(key), {
-            enumerable: true, /// XXX
+            enumerable: true,
             value: this[key]
           });
         }
