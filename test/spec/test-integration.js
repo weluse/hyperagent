@@ -88,7 +88,7 @@
       }.bind(this)).then(done, done);
     });
 
-    it('should templated links twice for different params', function (done) {
+    it('should load templated links twice for different params', function (done) {
       for (var i = 0; i < 3; i += 1) {
         this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
       }
@@ -105,6 +105,23 @@
       }.bind(this)).then(function () {
         assert.equal(this.ajaxCalls.length, 3,
           'should refetch resource w/ different params');
+      }.bind(this)).then(done, done);
+    });
+
+    it('should not keep stale data from templated links', function (done) {
+      this.ajaxResponses.push(JSON.stringify({ title: 'mike' }));
+      this.ajaxResponses.push(JSON.stringify({ title: 'passy' }));
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+
+      agent.fetch().then(function () {
+        return agent.link('ht:me', 'passy').fetch();
+      }.bind(this)).then(function () {
+        assert.equal(agent.link('ht:me', { name: 'passy' }).props.title, 'passy');
+        return agent.link('ht:me', 'mike').fetch();
+      }.bind(this)).then(function () {
+        assert.equal(agent.link('ht:me', { name: 'mike' }).props.title, 'mike');
       }.bind(this)).then(done, done);
     });
   });
