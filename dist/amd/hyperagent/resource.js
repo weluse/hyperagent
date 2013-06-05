@@ -206,9 +206,18 @@ define(
     /**
      * Updates the internal URL to the new, relative change. This is not an
      * idempotent function.
+     *
+     * Returns a boolean indicating whether the navigation changed the previously
+     * used URL or not.
      */
     Resource.prototype._navigateUrl = function _navigateUrl(value) {
-      this._options.url = Resource.resolveUrl(this._options.url, value);
+      var newUrl = Resource.resolveUrl(this._options.url, value);
+      if (newUrl !== this._options.url) {
+        this._options.url = newUrl;
+        return true;
+      }
+
+      return false;
     };
 
     /**
@@ -342,7 +351,11 @@ define(
       }
 
       var url = (new URI.expand(this.href, params)).toString();
-      this._navigateUrl(url);
+
+      // If expansion triggered a URL change, consider the current data stale.
+      if (this._navigateUrl(url)) {
+        this.loaded = false;
+      }
     };
 
     LinkResource.prototype.toString = function () {
