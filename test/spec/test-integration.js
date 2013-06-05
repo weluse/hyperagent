@@ -87,5 +87,25 @@
         assert.equal(this.ajaxCalls.length, 2);
       }.bind(this)).then(done, done);
     });
+
+    it('should templated links twice for different params', function (done) {
+      for (var i = 0; i < 3; i += 1) {
+        this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+      }
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+      assert.equal(this.ajaxCalls.length, 0);
+
+      agent.fetch().then(function () {
+        assert.equal(this.ajaxCalls.length, 1);
+        return agent.link('ht:me', 'passy').fetch();
+      }.bind(this)).then(function () {
+        assert.equal(this.ajaxCalls.length, 2);
+        return agent.link('ht:me', 'mike').fetch();
+      }.bind(this)).then(function () {
+        assert.equal(this.ajaxCalls.length, 3,
+          'should refetch resource w/ different params');
+      }.bind(this)).then(done, done);
+    });
   });
 }());
