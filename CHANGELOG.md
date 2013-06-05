@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.2 (2013-06-05)
+  - Fixed stale properties when loading different templated links from the same
+    root resource.
+
 ## v0.2.1 (2013-06-03)
   - Expose `Hyperagent.resource.resolveUrl(oldUrl, newUrl)`
 
