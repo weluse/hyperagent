@@ -37,6 +37,14 @@ You can see the library in action in the
 [live sample application](http://weluse.github.io/hyperagent/sample/) and check
 out the source in [`sample/`](https://github.com/weluse/hyperagent/tree/master/sample).
 
+## Plugins
+
+hyperagent.js provides some facilities for plugins to hook into and work with
+data from the response object. There is currently one plugin:
+
+- [hyperagent-forms.js](https://github.com/weluse/hyperagent-forms) adds
+  support for a custom HAL forms profile
+
 ## Example
 
 The following JSON response represents the entry point of
