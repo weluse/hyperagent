@@ -5,7 +5,7 @@ This is a simple example application accessing the
 proxy.
 
 It showcases how to use hyperagent.js to access an API while sharing as little
-as possible knowledge about the structure of the data and how to receive it and
+knowledge as possible about the structure of the data as well as how to receive it and
 drive the application state completely through hypermedia.
 
 The demo uses [AngularJS](http://angularjs.org/) and [CORS
