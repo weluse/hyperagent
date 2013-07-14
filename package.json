@@ -14,7 +14,7 @@
     "grunt-contrib-connect": "~0.3.0",
     "grunt-devtools": "~0.1.0-7",
     "karma-mocha": "0.0.3",
-    "grunt-karma": "https://github.com/karma-runner/grunt-karma/tarball/eb956ca331deae1c7f9c4555cbf6558df1734146",
+    "grunt-karma": "https://github.com/karma-runner/grunt-karma/archive/eb956ca331deae1c7f9c4555cbf6558df1734146.tar.gz",
     "grunt-open": "~0.2.0",
     "coveralls": "~2.0.7",
     "karma-coverage": "0.0.3"
