@@ -92,7 +92,7 @@ module.exports = function (grunt) {
         options: {
           banner: '(function () {\n',
           footer: '\nwindow.Hyperagent = requireModule(\'hyperagent\');\n}());',
-          process: processNamedAMD
+          // process: processNamedAMD
         },
         files: [{
           src: ['<%= yeoman.lib %>/loader.js', '<%= yeoman.dist %>/amd/{,**/}*.js'],
