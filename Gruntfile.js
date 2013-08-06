@@ -13,8 +13,7 @@ module.exports = function (grunt) {
   // Name the AMD modules so we can register them in the concatenated build.
   var processNamedAMD = function (src, filepath) {
     // Use the two last components of the path, e.g. 'hyperagent/agent'
-    var name = filepath.replace(/dist\/amd\//, '').replace(/\.js$/, '');
-    return src.replace(/define\(/, 'define(\'' + name + '\',');
+    return src.replace(/define\("\/hyperagent/, 'define(\"hyperagent');
   };
 
   var mountFolder = function (connect, dir) {
