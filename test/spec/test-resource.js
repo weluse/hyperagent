@@ -242,6 +242,48 @@
       });
     });
 
+    describe('Resource#fetch', function () {
+      beforeEach(function () {
+        this.ajaxCalls = [];
+        Hyperagent.configure('ajax', function () {
+          this.ajaxCalls.push(arguments);
+        }.bind(this));
+      });
+
+      it('should mix in ajax options', function () {
+        this.agent._load({ _links: {
+          users: { href: '/users/' }
+        } });
+
+        this.agent.links.users.fetch({ ajax: {
+          type: 'HEAD'
+        } });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].url, 'http://example.com/users/');
+        assert.equal(this.ajaxCalls[0][0].type, 'HEAD');
+      });
+
+      it('should override ressource-level ajax options', function () {
+        var agent = new Hyperagent.Resource({
+          url: 'http://example.com/',
+          ajax: { headers: { 'X-Awesome': '23' }, cache: false }
+        });
+        agent._load({ _links: {
+          users: { href: '/users/' }
+        } });
+
+        agent.links.users.fetch({ ajax: {
+          cache: true
+        } });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].url, 'http://example.com/users/');
+        assert.isTrue(this.ajaxCalls[0][0].cache);
+        assert.equal(this.ajaxCalls[0][0].headers['X-Awesome'], 23);
+      });
+    });
+
     describe('loadHooks', function () {
       afterEach(function () {
         Hyperagent.configure('loadHooks', []);
