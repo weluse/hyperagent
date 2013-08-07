@@ -1,5 +1,5 @@
 "use strict";
-var config = require("hyperagent/config");
+var config = require("hyperagent/config").config;
 
 function Properties(response, options) {
   // XXX: This function is too large. Let's figure out if we could instead build
@@ -34,6 +34,5 @@ function Properties(response, options) {
     }
   }.bind(this));
 }
-
 
 exports.Properties = Properties;

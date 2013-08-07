@@ -1,7 +1,8 @@
-define(
+define("/hyperagent/properties",
   ["hyperagent/config","exports"],
-  function(config, __exports__) {
+  function(__dependency1__, __exports__) {
     "use strict";
+    var config = __dependency1__.config;
 
     function Properties(response, options) {
       // XXX: This function is too large. Let's figure out if we could instead build
@@ -36,7 +37,6 @@ define(
         }
       }.bind(this));
     }
-
 
     __exports__.Properties = Properties;
   });

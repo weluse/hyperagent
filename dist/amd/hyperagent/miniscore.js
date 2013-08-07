@@ -1,6 +1,6 @@
-define(
-  [],
-  function() {
+define("/hyperagent/miniscore",
+  ["exports"],
+  function(__exports__) {
     "use strict";
     /*jshint strict:false */
     /**
@@ -94,6 +94,5 @@ define(
       return Array.isArray(obj) ? obj.slice() : _.extend({}, obj);
     };
 
-
-    return _;
+    __exports__._ = _;
   });

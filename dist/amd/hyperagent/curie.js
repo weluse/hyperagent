@@ -1,4 +1,4 @@
-define(
+define("/hyperagent/curie",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -65,7 +65,6 @@ define(
 
       return this._store[curie[0]] !== undefined;
     };
-
 
     __exports__.CurieStore = CurieStore;
   });

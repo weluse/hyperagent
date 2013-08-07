@@ -37,6 +37,14 @@ You can see the library in action in the
 [live sample application](http://weluse.github.io/hyperagent/sample/) and check
 out the source in [`sample/`](https://github.com/weluse/hyperagent/tree/master/sample).
 
+## Plugins
+
+hyperagent.js provides some facilities for plugins to hook into and work with
+data from the response object. There is currently one plugin:
+
+- [hyperagent-forms.js](https://github.com/weluse/hyperagent-forms) adds
+  support for a custom HAL forms profile
+
 ## Example
 
 The following JSON response represents the entry point of
@@ -239,6 +247,14 @@ root.links['ht:users'].fetch().then(...);
 root.links['ht:users'].fetch({ force: true }).then(...);
 ```
 
+If you want to pass in custom options to the AJAX call, you can specify them via
+the `ajax` option:
+
+```javascript
+root.links['ht:users'].fetch({ ajax: { headers: { 'X-Awesome': '1337' } } }).then(...);
+```
+
+
 ### Curies
 
 [Curies] are supported in that you can access links, properties and embedded
@@ -278,7 +294,7 @@ Returns the URL of where the resource was or is about to be fetched from. This
 value is always an absolute, normalized URL in contrast to the value of
 `links.self.href`.
 
-### Resource#fetch()
+### Resource#fetch([options])
 
 Loads the document from the URL provided and enabled the access via `props`,
 `links`, and `embedded`. Returns a chainable promise.
@@ -288,6 +304,11 @@ Loads the document from the URL provided and enabled the access via `props`,
   console.log('href: ', api.links.self.props.href);
 });
 ```
+
+The optional `options` object can have these keys:
+
+  - `force`: defaults to `false`, overrides the internal cache
+  - `ajax`: overrides Resource-level AJAX options
 
 ### Resource#loaded
 

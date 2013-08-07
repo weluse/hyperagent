@@ -1,10 +1,11 @@
-define(
-  ["hyperagent/loader","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, config, __exports__) {
+define("/hyperagent/resource",
+  ["hyperagent/config","hyperagent/loader","hyperagent/properties","hyperagent/curie","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
-    var loadAjax = __dependency1__.loadAjax;
-    var Properties = __dependency2__.Properties;
-    var CurieStore = __dependency3__.CurieStore;
+    var config = __dependency1__.config;
+    var loadAjax = __dependency2__.loadAjax;
+    var Properties = __dependency3__.Properties;
+    var CurieStore = __dependency4__.CurieStore;
     /*jshint strict:false, latedef:false */
 
     var _ = config._;
@@ -48,12 +49,14 @@ define(
      * - password
      * - url (not directly set by the user)
      *
-     * In addition, all options from `options.ajax` are mixed in.
+     * In addition, all options from `options.ajax` of the Resource instance are
+     * mixed in.
      *
      * Parameters:
      * - options:
      *   - force: defaults to false, whether to force a new request if the result is
      *   cached, i. e this resource is already marked as `loaded`.
+     *   - ajax: optional hash of options to override the Resource AJAX options.
      *
      * Returns a promise on the this Resource instance.
      */
@@ -73,6 +76,10 @@ define(
           'password', 'url');
       if (this._options.ajax) {
         _.extend(ajaxOptions, this._options.ajax);
+      }
+      if (options.ajax) {
+        _.extend(ajaxOptions, options.ajax);
+
       }
 
       return loadAjax(ajaxOptions).then(function _ajaxThen(response) {

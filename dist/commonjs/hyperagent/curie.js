@@ -63,5 +63,4 @@ CurieStore.prototype.canExpand = function canExpand(value) {
   return this._store[curie[0]] !== undefined;
 };
 
-
 exports.CurieStore = CurieStore;
