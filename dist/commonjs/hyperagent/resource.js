@@ -1,5 +1,5 @@
 "use strict";
-var config = require("hyperagent/config");
+var config = require("hyperagent/config").config;
 var loadAjax = require("hyperagent/loader").loadAjax;
 var Properties = require("hyperagent/properties").Properties;
 var CurieStore = require("hyperagent/curie").CurieStore;
@@ -46,12 +46,14 @@ Resource.factory = function (Cls) {
  * - password
  * - url (not directly set by the user)
  *
- * In addition, all options from `options.ajax` are mixed in.
+ * In addition, all options from `options.ajax` of the Resource instance are
+ * mixed in.
  *
  * Parameters:
  * - options:
  *   - force: defaults to false, whether to force a new request if the result is
  *   cached, i. e this resource is already marked as `loaded`.
+ *   - ajax: optional hash of options to override the Resource AJAX options.
  *
  * Returns a promise on the this Resource instance.
  */
@@ -71,6 +73,10 @@ Resource.prototype.fetch = function fetch(options) {
       'password', 'url');
   if (this._options.ajax) {
     _.extend(ajaxOptions, this._options.ajax);
+  }
+  if (options.ajax) {
+    _.extend(ajaxOptions, options.ajax);
+
   }
 
   return loadAjax(ajaxOptions).then(function _ajaxThen(response) {

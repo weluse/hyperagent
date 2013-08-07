@@ -1,5 +1,5 @@
 "use strict";
-var _ = require("hyperagent/miniscore");
+var _ = require("hyperagent/miniscore")._;
 
 var config = {};
 
@@ -12,4 +12,4 @@ if (typeof window !== 'undefined') {
 }
 
 
-module.exports = config;
+exports.config = config;

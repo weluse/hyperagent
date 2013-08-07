@@ -91,5 +91,4 @@ _.clone = function (obj) {
   return Array.isArray(obj) ? obj.slice() : _.extend({}, obj);
 };
 
-
-module.exports = _;
+exports._ = _;

@@ -1,7 +1,8 @@
-define(
-  ["hyperagent/miniscore"],
-  function(_) {
+define("/hyperagent/config",
+  ["hyperagent/miniscore","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
+    var _ = __dependency1__._;
 
     var config = {};
 
@@ -14,5 +15,5 @@ define(
     }
 
 
-    return config;
+    __exports__.config = config;
   });

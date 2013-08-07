@@ -32,15 +32,16 @@ var define, requireModule;
   };
 }());
 
-define('hyperagent',
+define("hyperagent",
   ["hyperagent/resource","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, _config, __exports__) {
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
     var Resource = __dependency1__.Resource;
     var LazyResource = __dependency1__.LazyResource;
     var LinkResource = __dependency1__.LinkResource;
     var Properties = __dependency2__.Properties;
     var CurieStore = __dependency3__.CurieStore;
+    var _config = __dependency4__.config;
 
     function configure(name, value) {
       _config[name] = value;
@@ -55,10 +56,11 @@ define('hyperagent',
     __exports__.configure = configure;
     __exports__._config = _config;
   });
-define('hyperagent/config',
-  ["hyperagent/miniscore"],
-  function(_) {
+define("hyperagent/config",
+  ["hyperagent/miniscore","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
+    var _ = __dependency1__._;
 
     var config = {};
 
@@ -71,9 +73,9 @@ define('hyperagent/config',
     }
 
 
-    return config;
+    __exports__.config = config;
   });
-define('hyperagent/curie',
+define("hyperagent/curie",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -141,17 +143,17 @@ define('hyperagent/curie',
       return this._store[curie[0]] !== undefined;
     };
 
-
     __exports__.CurieStore = CurieStore;
   });
-define('hyperagent/loader',
+define("hyperagent/loader",
   ["hyperagent/config","exports"],
-  function(config, __exports__) {
+  function(__dependency1__, __exports__) {
     "use strict";
+    var config = __dependency1__.config;
 
     function loadAjax(options) {
       var deferred = config.defer();
-      config.ajax(config._.extend(options, {
+      config.ajax(config._.extend({
         headers: {
           'Accept': 'application/hal+json, application/json, */*; q=0.01',
           'X-Requested-With': 'XMLHttpRequest'
@@ -159,17 +161,16 @@ define('hyperagent/loader',
         success: deferred.resolve,
         error: deferred.reject,
         dataType: 'html'  // We don't want auto-converting
-      }));
+      }, options));
 
       return deferred.promise;
     }
 
-
     __exports__.loadAjax = loadAjax;
   });
-define('hyperagent/miniscore',
-  [],
-  function() {
+define("hyperagent/miniscore",
+  ["exports"],
+  function(__exports__) {
     "use strict";
     /*jshint strict:false */
     /**
@@ -263,13 +264,13 @@ define('hyperagent/miniscore',
       return Array.isArray(obj) ? obj.slice() : _.extend({}, obj);
     };
 
-
-    return _;
+    __exports__._ = _;
   });
-define('hyperagent/properties',
+define("hyperagent/properties",
   ["hyperagent/config","exports"],
-  function(config, __exports__) {
+  function(__dependency1__, __exports__) {
     "use strict";
+    var config = __dependency1__.config;
 
     function Properties(response, options) {
       // XXX: This function is too large. Let's figure out if we could instead build
@@ -305,16 +306,16 @@ define('hyperagent/properties',
       }.bind(this));
     }
 
-
     __exports__.Properties = Properties;
   });
-define('hyperagent/resource',
-  ["hyperagent/loader","hyperagent/properties","hyperagent/curie","hyperagent/config","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, config, __exports__) {
+define("hyperagent/resource",
+  ["hyperagent/config","hyperagent/loader","hyperagent/properties","hyperagent/curie","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
-    var loadAjax = __dependency1__.loadAjax;
-    var Properties = __dependency2__.Properties;
-    var CurieStore = __dependency3__.CurieStore;
+    var config = __dependency1__.config;
+    var loadAjax = __dependency2__.loadAjax;
+    var Properties = __dependency3__.Properties;
+    var CurieStore = __dependency4__.CurieStore;
     /*jshint strict:false, latedef:false */
 
     var _ = config._;
@@ -358,12 +359,14 @@ define('hyperagent/resource',
      * - password
      * - url (not directly set by the user)
      *
-     * In addition, all options from `options.ajax` are mixed in.
+     * In addition, all options from `options.ajax` of the Resource instance are
+     * mixed in.
      *
      * Parameters:
      * - options:
      *   - force: defaults to false, whether to force a new request if the result is
      *   cached, i. e this resource is already marked as `loaded`.
+     *   - ajax: optional hash of options to override the Resource AJAX options.
      *
      * Returns a promise on the this Resource instance.
      */
@@ -383,6 +386,10 @@ define('hyperagent/resource',
           'password', 'url');
       if (this._options.ajax) {
         _.extend(ajaxOptions, this._options.ajax);
+      }
+      if (options.ajax) {
+        _.extend(ajaxOptions, options.ajax);
+
       }
 
       return loadAjax(ajaxOptions).then(function _ajaxThen(response) {
