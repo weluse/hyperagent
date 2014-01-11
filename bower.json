@@ -7,7 +7,7 @@
     "uri.js": "~1.10.2"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
+    "mocha": "~1.17.0",
     "chai": "~1.8.0"
   },
   "ignore": [
