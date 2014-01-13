@@ -120,6 +120,14 @@ module.exports = function (grunt) {
       test: {
         path: 'http://localhost:<%= connect.options.port %>/test/'
       }
+    },
+
+    changelog: {
+      options: {
+        github: 'weluse/hyperagent',
+        dest: 'CHANGELOG.md',
+        version: require('./bower.json').version
+      }
     }
   });
 
