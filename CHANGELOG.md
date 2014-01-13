@@ -1,4 +1,16 @@
-# Changelog
+<a name="v0.4.0"></a>
+## v0.4.0 (2014-01-13)
+
+
+#### Bug Fixes
+
+* **loader:** extending headers by itself ([8c7739a7](http://github.com/weluse/hyperagent/commit/8c7739a7962efd29f24012af8bffdbbe9fb48702))
+
+
+#### Features
+
+* **build:** changelog is now automatically generated ([68fec099](http://github.com/weluse/hyperagent/commit/68fec0997be743a76861e7b98e7f58cb41d120fc))
+* **deps:** update Q and URIjs deps ([8d3e098c](http://github.com/weluse/hyperagent/commit/8d3e098c7438cb98d78d342c7a8fad59638c01c1))
 
 ## v0.3.0 (2013-08-07)
 
