@@ -2,9 +2,9 @@
   "name": "hyperagent",
   "version": "0.3.0",
   "dependencies": {
-    "q": "~0.9.3",
+    "q": "~1.0.0",
     "jquery": "~2.0.0",
-    "uri.js": "~1.10.2"
+    "uri.js": "~1.11.0"
   },
   "devDependencies": {
     "mocha": "~1.17.0",
