@@ -13,7 +13,10 @@ module.factory('HALTalkResource', function HALTalkResource() {
     return jQuery.ajax(options);
   });
 
-  return new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+  return new Hyperagent.Resource({
+    url: 'http://haltalk.herokuapp.com/',
+    headers: {}
+  });
 });
 
 module.controller('HALCtrl', function HALCtrl($scope, $location, HALTalkResource) {
