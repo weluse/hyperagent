@@ -8,14 +8,16 @@ module.factory('HALTalkResource', function HALTalkResource() {
 
   // Configure Hyperagent to prefix every URL with the unicorn proxy.
   Hyperagent.configure('ajax', function ajax(options) {
-    options.url = 'http://unicorn-cors-proxy.herokuapp.com/' + options.url;
+    options.url = 'https://unicorn-cors-proxy.herokuapp.com/' + options.url;
 
     return jQuery.ajax(options);
   });
 
   return new Hyperagent.Resource({
     url: 'http://haltalk.herokuapp.com/',
-    headers: {}
+    headers: {
+      'X-Requested-With': 'Hyperagent'
+    }
   });
 });
 
