@@ -4,11 +4,11 @@
   "dependencies": {
     "q": "~1.0.0",
     "jquery": "~2.0.0",
-    "uri.js": "~1.11.0"
+    "uri.js": "~1.13.0"
   },
   "devDependencies": {
-    "mocha": "~1.17.0",
-    "chai": "~1.8.0"
+    "mocha": "~1.18.0",
+    "chai": "~1.9.0"
   },
   "ignore": [
     "**/*.md",
