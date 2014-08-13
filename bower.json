@@ -1,6 +1,7 @@
 {
   "name": "hyperagent",
   "version": "0.4.0",
+  "main": "./dist/hyperagent.js",
   "dependencies": {
     "q": "~1.0.0",
     "jquery": "~2.0.0",
