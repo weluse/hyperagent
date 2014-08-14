@@ -357,6 +357,11 @@ var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
 assert.equal(res, 'http://example.com/bar');
 ```
 
+## Contributing
+
+Please follow the existing code style and the commit message style from
+[conventional changelog](https://github.com/ajoslin/conventional-changelog/blob/master/CONVENTIONS.md).
+
 ## FAQ
 
 ### Promises?
