@@ -74,12 +74,13 @@ define("/hyperagent/resource",
       // Pick only AJAX-relevant options.
       var ajaxOptions = _.pick(this._options, 'headers', 'username',
           'password', 'url');
+
       if (this._options.ajax) {
         _.extend(ajaxOptions, this._options.ajax);
       }
+
       if (options.ajax) {
         _.extend(ajaxOptions, options.ajax);
-
       }
 
       return loadAjax(ajaxOptions).then(function _ajaxThen(response) {
