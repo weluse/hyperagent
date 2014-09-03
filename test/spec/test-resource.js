@@ -244,6 +244,7 @@
 
     describe('Resource#fetch', function () {
       beforeEach(function () {
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
         this.ajaxCalls = [];
         Hyperagent.configure('ajax', function () {
           this.ajaxCalls.push(arguments);
