@@ -161,6 +161,21 @@ config.ajax({
 });
 ```
 
+**WARNING**: Note that defining a success or error function in the ajax options hash will make Hyperagent unable to properly handle AJAX calls (Hyperagent ties into these two ajax options to resolve promises). A configuration setting these options will make it so Hyperagent resources will never properly resolve/throw errors:
+
+```javascript
+
+var Resource = require('hyperagent').Resource;
+var api = new Resource({
+  url: 'https://api.example.com/',
+  ajax: {
+    success: function(){}, // DON'T DO THIS
+    error: function(){}    // OR THIS
+  }
+});
+```
+
+
 ### Attributes
 
 Attributes are exposed as the `props` object on the Resource instance:
