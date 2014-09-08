@@ -114,8 +114,10 @@ Resource.prototype.link = function link(rel, params) {
  * Parses a response string.
  */
 Resource.prototype._parse = function _parse(response) {
-  var object = JSON.parse(response);
-  this._load(object);
+  if(response){
+    var object = JSON.parse(response);
+    this._load(object);
+  }
 };
 
 /**
