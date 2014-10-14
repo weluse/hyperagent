@@ -4,8 +4,8 @@
   "main": "./dist/hyperagent.js",
   "dependencies": {
     "q": "~1.0.0",
-    "jquery": "~2.0.0",
-    "uri.js": "~1.13.0"
+    "jquery": "~2.1.0",
+    "uri.js": "~1.14.0"
   },
   "devDependencies": {
     "mocha": "~1.18.0",
