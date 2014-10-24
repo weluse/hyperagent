@@ -328,6 +328,62 @@
           } });
         var link = this.agent.related('user');
         assert.equal(link.url(), 'http://example.com/users/passy');
+
+      });
+    });
+
+    describe('Resource#post', function () {
+      beforeEach(function () {
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
+        this.ajaxCalls = [];
+        Hyperagent.configure('ajax', function () {
+          this.ajaxCalls.push(arguments);
+        }.bind(this));
+      });
+
+      it('should make post request', function () {
+        this.agent._load({ _links: {
+          users: { href: '/users/' }
+        } });
+
+        this.agent.links.users.post("test body");
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].url, 'http://example.com/users/');
+        assert.equal(this.ajaxCalls[0][0].type, 'POST');
+        assert.equal(this.ajaxCalls[0][0].data, 'test body');
+      });
+
+
+      it('should mix in ajax options', function () {
+        this.agent._load({ _links: {
+          users: { href: '/users/' }
+        } });
+
+        this.agent.links.users.post("test body", { ajax: {
+          cache: true
+        } });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].cache, true);
+      });
+
+      it('should override resource-level ajax options', function () {
+        var agent = new Hyperagent.Resource({
+          url: 'http://example.com/',
+          ajax: { headers: { 'X-Awesome': '23' }, cache: false }
+        });
+        agent._load({ _links: {
+          users: { href: '/users/' }
+        } });
+
+        agent.links.users.post("test body", { ajax: {
+          cache: true
+        } });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.isTrue(this.ajaxCalls[0][0].cache);
+        assert.equal(this.ajaxCalls[0][0].headers['X-Awesome'], 23);
       });
 
     });
