@@ -318,7 +318,7 @@
         assert.equal(link.url(), 'http://example.com/users/passy');
       });
 
-      it('should return prefer embedded over links', function () {
+      it('should prefer embedded over links', function () {
         this.agent._load({
           _embedded: {
             user: { _links: { self: { href: 'http://example.com/users/passy' }}}
