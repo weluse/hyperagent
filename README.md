@@ -363,16 +363,7 @@ An object containing all embedded resource, created lazily on access.
 An object containing all properties on the current resource. This includes all
 properties of the resource, except `_links` and `_embedded`.
 
-### Resource.resolveUrl(oldUrl, newUrl)
-
-Combines an old with a new URL:
-
-```javascript
-var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
-assert.equal(res, 'http://example.com/bar');
-```
-
-### Resource.related(rel[, params])
+### Resource#related(rel[, params])
 
 Navigates the link identified by the given `rel` regardless of whether
 it is in the `_embedded` or `_links` section. If `params` are given
@@ -394,6 +385,14 @@ var me = api.related('me', { username: 'sindresorhus' });
 assert(me.url() === 'http://example.com/users/sindresorhus');
 ```
 
+### Resource.resolveUrl(oldUrl, newUrl)
+
+Combines an old with a new URL:
+
+```javascript
+var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
+assert.equal(res, 'http://example.com/bar');
+```
 
 ## Contributing
 
