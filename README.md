@@ -394,6 +394,21 @@ var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
 assert.equal(res, 'http://example.com/bar');
 ```
 
+### Resource.post(body[, options]
+
+Makes an HTTP POST request to the resource. Returns a chainable promise.
+
+```javascript
+(new Resource('http://example.com/')).post("First post!!!").then(function (api) {
+  console.log("Blog post published");
+});
+```
+
+The optional `options` object can have these keys:
+
+  - `ajax`: overrides Resource-level AJAX options (except `type` and `data`)
+
+
 ## Contributing
 
 Please follow the existing code style and the commit message style from
