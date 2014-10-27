@@ -285,6 +285,53 @@
       });
     });
 
+    describe('#related', function () {
+      beforeEach(function () {
+        this.agent = new Hyperagent.Resource({ url: 'http://example.com/' });
+        this.ajaxCalls = [];
+        Hyperagent.configure('ajax', function () {
+          this.ajaxCalls.push(arguments);
+        }.bind(this));
+      });
+
+      it('should follow links when there is no embedded', function () {
+        this.agent._load({ _links: {
+          user: { href: 'http://example.com/users/passy' }
+        } });
+        var link = this.agent.related('user');
+        assert.equal(link.url(), 'http://example.com/users/passy');
+      });
+
+      it('should expand templates', function () {
+        this.agent._load({ _links: {
+          user: { href: 'http://example.com/users/{user}', templated: true }
+        } });
+        var link = this.agent.related('user', { user: 'passy' });
+        assert.equal(link.url(), 'http://example.com/users/passy');
+      });
+
+      it('should return cached resource from embedded when available', function () {
+        this.agent._load({ _embedded: {
+          user: { _links: { self: { href: 'http://example.com/users/passy' }}}
+        } });
+        var link = this.agent.related('user');
+        assert.equal(link.url(), 'http://example.com/users/passy');
+      });
+
+      it('should prefer embedded over links', function () {
+        this.agent._load({
+          _embedded: {
+            user: { _links: { self: { href: 'http://example.com/users/passy' }}}
+          },
+          _links: {
+            user: { href: 'http://example.com/users/fail' }
+          } });
+        var link = this.agent.related('user');
+        assert.equal(link.url(), 'http://example.com/users/passy');
+      });
+
+    });
+
     describe('loadHooks', function () {
       afterEach(function () {
         Hyperagent.configure('loadHooks', []);
