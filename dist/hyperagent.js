@@ -279,8 +279,8 @@ define("hyperagent/properties",
       // one large object for defineProperties first and call on that in the end
       // and if that would make the code cleaner.
       options = options || {};
-      if (Object(response) !== response) {
-        throw new Error('The Properties argument must be an object.');
+      if (!response) {
+        response = {};
       }
       // Overwrite the response object with the original properties if provided.
       config._.defaults(response, options.original || {});
