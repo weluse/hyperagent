@@ -2,6 +2,7 @@
 var __dependency1__ = require("hyperagent/resource");
 var Resource = __dependency1__.Resource;
 var LazyResource = __dependency1__.LazyResource;
+var EmbeddedResource = __dependency1__.EmbeddedResource;
 var LinkResource = __dependency1__.LinkResource;
 var Properties = require("hyperagent/properties").Properties;
 var CurieStore = require("hyperagent/curie").CurieStore;
@@ -15,6 +16,7 @@ function configure(name, value) {
 exports.Resource = Resource;
 exports.Properties = Properties;
 exports.LazyResource = LazyResource;
+exports.EmbeddedResource = EmbeddedResource;
 exports.LinkResource = LinkResource;
 exports.CurieStore = CurieStore;
 exports.configure = configure;
