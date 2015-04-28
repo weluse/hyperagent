@@ -16,7 +16,7 @@ define("/hyperagent/miniscore",
         return;
       }
 
-      if (obj.forEach && obj.forEach === Array.prototype.forEach) {
+      if (obj.forEach === Array.prototype.forEach) {
         obj.forEach(iterator, context);
       } else if (obj.length === +obj.length) {
         for (var i = 0, l = obj.length; i < l; i++) {

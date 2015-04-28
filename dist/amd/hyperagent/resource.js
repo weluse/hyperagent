@@ -114,6 +114,22 @@ define("/hyperagent/resource",
     };
 
     /**
+     * Returns the set of resource(s) identified by the given `rel`
+     * (expanding the link template if params are provided).
+     *
+     * Arguments:
+     *  - rel: The rel of the link.
+     *  - params: Optional parameters to expand the link if it is a templated link.
+     */
+    Resource.prototype.related = function related(rel, params) {
+      if (params || !this.embedded.hasOwnProperty(rel)) {
+        return this.link(rel, params);
+      } else {
+        return this.embedded[rel];
+      } 
+    };
+
+    /**
      * Parses a response string.
      */
     Resource.prototype._parse = function _parse(response) {
@@ -373,5 +389,6 @@ define("/hyperagent/resource",
 
     __exports__.Resource = Resource;
     __exports__.LazyResource = LazyResource;
+    __exports__.EmbeddedResource = EmbeddedResource;
     __exports__.LinkResource = LinkResource;
   });
