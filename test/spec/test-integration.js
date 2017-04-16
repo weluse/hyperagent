@@ -124,5 +124,38 @@
         assert.equal(agent.link('ht:me', { name: 'mike' }).props.title, 'mike');
       }.bind(this)).then(done, done);
     });
+
+    it('should respond empty body fot DELETE HTTP requests', function (done) {
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+
+      agent.fetch().then(function () {
+        return agent.link('ht:me', 'passy').fetch({ ajax: {
+          type: 'DELETE'
+        } });
+      }.bind(this)).then(function (data) {
+        assert.isNotNull(data);
+      }.bind(this)).then(done, done);
+    });
+
+    it('should respond empty body fot PUT HTTP requests', function (done) {
+      this.ajaxResponses.push(JSON.stringify(fixtures.fullDoc));
+
+      var agent = new Hyperagent.Resource('http://haltalk.herokuapp.com/');
+
+      agent.fetch().then(function () {
+        return agent.link('ht:me', 'passy').fetch({
+          ajax: {
+            type: 'PUT'
+          },
+          data: {
+              title: 'new passy'
+          }
+        });
+      }.bind(this)).then(function (data) {
+        assert.isNotNull(data);
+      }.bind(this)).then(done, done);
+    });
   });
 }());

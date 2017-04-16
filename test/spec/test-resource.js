@@ -265,6 +265,39 @@
         assert.equal(this.ajaxCalls[0][0].type, 'HEAD');
       });
 
+      it('should accept PUT type', function () {
+        this.agent._load({ _links: {
+          users: { href: '/users/1' }
+        } });
+
+        this.agent.links.users.fetch({
+          ajax: {
+            type: 'PUT'
+          },
+          data: {}
+        });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].url, 'http://example.com/users/1');
+        assert.equal(this.ajaxCalls[0][0].type, 'PUT');
+      });
+
+      it('should accept DELETE type', function () {
+        this.agent._load({ _links: {
+          users: { href: '/users/1' }
+        } });
+
+        this.agent.links.users.fetch({
+          ajax: {
+              type: 'DELETE'
+          }
+        });
+
+        assert.equal(this.ajaxCalls.length, 1);
+        assert.equal(this.ajaxCalls[0][0].url, 'http://example.com/users/1');
+        assert.equal(this.ajaxCalls[0][0].type, 'DELETE');
+      });
+
       it('should override ressource-level ajax options', function () {
         var agent = new Hyperagent.Resource({
           url: 'http://example.com/',

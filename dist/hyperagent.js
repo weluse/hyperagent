@@ -188,7 +188,7 @@ define("hyperagent/miniscore",
         return;
       }
 
-      if (obj.forEach === Array.prototype.forEach) {
+      if (obj.forEach && obj.forEach === Array.prototype.forEach) {
         obj.forEach(iterator, context);
       } else if (obj.length === +obj.length) {
         for (var i = 0, l = obj.length; i < l; i++) {
@@ -429,8 +429,10 @@ define("hyperagent/resource",
      * Parses a response string.
      */
     Resource.prototype._parse = function _parse(response) {
-      var object = JSON.parse(response);
-      this._load(object);
+      if(response){
+        var object = JSON.parse(response);
+        this._load(object);
+      }
     };
 
     /**
