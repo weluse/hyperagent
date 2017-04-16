@@ -394,6 +394,29 @@ var res = Hyperagent.Resource.resolveUrl('http://example.com/foo', '/bar');
 assert.equal(res, 'http://example.com/bar');
 ```
 
+### Resource.related(rel[, params])
+
+Navigates the link identified by the given `rel` regardless of whether
+it is in the `_embedded` or `_links` section. If `params` are given
+they are used to expand the URI template. This allows consumers of
+this API to be indifferent to which section of the HAL document
+contains the link.
+
+```javascript
+// Given a set embedded or normal `post` links
+var posts = api.related('post');
+assert(posts[0].url() === 'http://example.com/posts/4ff8b9b52e95950002000004');
+```
+
+Calling with parameters:
+
+```javascript
+// Given a `me` URI template of `http://example.com/users/{username}`
+var me = api.related('me', { username: 'sindresorhus' });
+assert(me.url() === 'http://example.com/users/sindresorhus');
+```
+
+
 ## Contributing
 
 Please follow the existing code style and the commit message style from
